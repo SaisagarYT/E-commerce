@@ -5,6 +5,10 @@ const generateToken = require('../utils/generateToken');
 const userRegister = async(req,res) =>{
     const {name,email,password} = req.body;
 
+    if(name == '' || email == '' || password == ''){
+        console.log("Ente the details");
+    }
+
     try{
         const isExist = await Users.findOne({email});
         if(isExist){
