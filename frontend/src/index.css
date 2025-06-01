@@ -1,0 +1,33 @@
+.animate-marquee{
+    animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+    from{
+        transform: translateX(100%);
+    }
+    to{
+        transform: translateX(-200%)
+    }
+}
+
+.box{
+    transition: all 2s;
+}
+
+.rotate-temp:nth-child(even){
+    transform: rotateZ(20deg);
+    transition: all 0.5s;
+}
+.rotate-temp:nth-child(odd){
+    transform: rotateZ(-20deg);
+    transition: all 0.5s;
+}
+
+section div li{
+    margin-bottom: 10px;
+    font-size: 15px;
+    padding-bottom: 10px;
+}
+
+@import "tailwindcss";

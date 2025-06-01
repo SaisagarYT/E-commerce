@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const dotevn = require('dotenv');
 const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
+const orderRoute = require('./routes/orderRoutes');
 dotevn.config();
 const app = express();
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(cors());
 
 app.use('/api/users',userRoute);
 app.use('/api/products',productRoute);
+app.use('/api/orders',orderRoute);
 connectDB();
 
 app.get('/',(req,res)=>{
