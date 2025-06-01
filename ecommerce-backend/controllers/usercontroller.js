@@ -1,6 +1,7 @@
 const Users = require('../models/user');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
+const { response } = require('express');
 
 const userRegister = async(req,res) =>{
     const {name,email,password} = req.body;
@@ -55,4 +56,40 @@ const userLogin = async(req,res) =>{
     }
 }
 
-module.exports = {userRegister,userLogin};
+const getUsers = async(req,res) =>{
+    const user = Users.find();
+    if(!user){
+        return res.status(400).json({message:"Users not exist"});
+    }
+    else{
+        return res.status(200).json(user);
+    }
+}
+
+const deleteUser = async(req,res) =>{
+    const id = req.params.id;
+    const deleteUser = Users.findOneAndDelete({_id:id});
+    if(!deleteUser){
+        return res.status(400).json({message:"User not exist to delete"});
+    }
+    else{
+        return res.status(200).json(deleteUser);
+    }
+}
+
+const updateUser = async(req,res) =>{
+    const user = Users.find(req.params.id);
+
+    if(user){
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.isAdmin = req.body.isAdmin ?? user.isAdmin;
+        const updateUser = await user.save();
+        return res.status(200).json(updateUser);
+    }
+    else{
+        return res.status(400).json({message:"Internal server error"});
+    }
+}
+
+module.exports = {userRegister,userLogin,updateUser,deleteUser,getUsers};
