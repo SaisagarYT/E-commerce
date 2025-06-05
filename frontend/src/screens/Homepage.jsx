@@ -12,9 +12,9 @@ const Homepage = () => {
     })
   },[])
   return (
-    <section className='w-screen h-screen flex items-center flex-col'>
-      <div className='w-full h-full flex overflow-hidden mt-30'>
-        <div className='w-[50%] flex justify-center flex-col items-center h-full gap-10 pl-20 pr-20'>
+    <section className='w-screen h-screen max-md:h-max flex items-center flex-col'>
+      <div className='w-full h-full flex max-md:flex-col-reverse overflow-hidden'>
+        <div className='w-[50%] max-md:w-full flex justify-center flex-col items-center h-full gap-10 pl-20 pr-20'>
           <div className='w-[100%] flex flex-col items-start gap-8'>
             <h1 className='text-6xl w-[90%] font-extrabold' data-aos="fade-right">FIND CLOTHES THAT MATCHES YOUR STYE</h1>
 
@@ -40,8 +40,8 @@ const Homepage = () => {
           </section>
         </div>
 
-        <div className='w-[50%] flex justify-center h-full overflow-hidden'>
-          <img data-aos="fade-up-left" src="https://chop-co.netlify.app/assets/Main-DjG-FNVr.svg" alt="image" />
+        <div className='w-[50%] max-md:w-full flex justify-center h-full overflow-hidden'>
+          <img className='' data-aos="fade-up-left" src="https://chop-co.netlify.app/assets/Main-DjG-FNVr.svg" alt="image" />
         </div>
       </div> 
     </section>

@@ -1,27 +1,29 @@
-.animate-marquee{
-    animation: marquee 10s linear infinite;
+.animate-marquee {
+  animation: marquee 10s linear infinite;
 }
 
 @keyframes marquee {
-    from{
-        transform: translateX(100%);
-    }
-    to{
-        transform: translateX(-200%)
-    }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .box{
-    transition: all 2s;
+    transition: all 0.2s;
 }
 
 .rotate-temp:nth-child(even){
-    transform: rotateZ(20deg);
-    transition: all 0.5s;
+  transform: scale(1.2);
+  transition: all 0.2s linear;
 }
+
 .rotate-temp:nth-child(odd){
-    transform: rotateZ(-20deg);
-    transition: all 0.5s;
+  transform: rotateZ(-20deg);
+  transform: scale(1.2);
+  transition: all 0.2s linear;
 }
 
 section div li{
