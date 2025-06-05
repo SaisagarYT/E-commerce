@@ -29,6 +29,18 @@ const createProduct = async(req,res) =>{
     return res.status(200).json(createdProduct);
 }
 
+const createManyProducts = async(req,res) =>{
+    try{
+        const products = req.body;
+    
+        const insertedProduct = Products.insertMany(products);
+        return res.status(200).json({message:"Inserted successfully"});
+    }
+    catch(err){
+        return res.status(400).json(err.message);
+    }
+}
+
 const deleteProduct = async(req,res) =>{
     const id = req.params.id;
     try{
@@ -68,4 +80,14 @@ const updateProduct = async(req,res) =>{
      }
 }
 
-module.exports = {getAllProducts,getProductById,createProduct,deleteProduct,updateProduct};
+const deleteAllProducts = async(req,res) =>{
+    const isExist = await Products.find();
+    if(!isExist){
+        return res.status(400).json({Messate:"There are no products exist!"});
+    }
+    else{
+        await Products.deleteMany();
+        return res.status(200).json({message:"All records are deleted"});
+    }
+}
+module.exports = {getAllProducts,getProductById,createProduct,deleteProduct,updateProduct,createManyProducts,deleteAllProducts};
