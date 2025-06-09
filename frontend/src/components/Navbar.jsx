@@ -22,14 +22,16 @@ const Navbar = () => {
   }, []);
   return (
     <div className='w-full overflow-hidden bg-white'>
-      <span className='w-full h-7 overh bg-black absolute text-white text-[13px] justify-end flex items-center' id='discount-banner'>
+      <span className='w-full h-7 overh bg-black text-white text-[13px] justify-end flex items-center' id='discount-banner'>
         <p>Check out <a href='/' className='w-[60%] hover:underline cursor-pointer'>Discount</a> upto 50% and latest deals.</p>
         <div className='w-[40%] flex justify-end pr-10'>
           <p className='text-[18px] cursor-pointer' onClick={bannerHandler}>x</p>
         </div>
       </span>
       <div className='w-full h-23 flex justify-around items-center shadow-2xs sticky bg-white'>
-        <h1 className='font-bold text-4xl'>SHOP.CO</h1>
+        <Link to='/'>
+          <h1 className='font-bold text-4xl cursor-pointer'>SHOP.CO</h1>
+        </Link>
         <ul className='flex gap-6 max-md:hidden text-[15px]'>
           <li>Shop</li>
           <li>New Arrivel</li>

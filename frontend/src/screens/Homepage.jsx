@@ -12,7 +12,7 @@ const Homepage = () => {
     })
   },[])
   return (
-    <section className='w-screen h-screen max-md:h-max flex items-center flex-col'>
+    <section className='w-screen max-md:h-max flex items-center flex-col'>
       <div className='w-full h-full flex max-md:flex-col-reverse overflow-hidden'>
         <div className='w-[50%] max-md:w-full flex justify-center flex-col items-center h-full gap-10 pl-20 pr-20'>
           <div className='w-[100%] flex flex-col items-start gap-8'>

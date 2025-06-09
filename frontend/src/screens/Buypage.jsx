@@ -1,10 +1,11 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import Navbar from '../components/Navbar';
 
 const Buypage = () => {
     const {id} = useParams();
-    const [data,setData] = useState([{}]);
+    const [data,setData] = useState([]);
     useEffect(() =>{
         const handleData = async() =>{
             const response = await Axios.get(`http://localhost:5000/api/cart/get`);
@@ -14,15 +15,26 @@ const Buypage = () => {
     },[id])
 
     const removeProduct = async() =>{
-        const response = await Axios.delete(`http://localhost:5000/api/cart/delete/${id}`);
-        console.log(response.statusText);
+        try{
+
+            const response = await Axios.delete(`http://localhost:5000/api/cart/delete/${id}`);
+            console.log(response.statusText);
+        }
+        catch(err){
+            console.log("error in the backend is:",err);
+        }
     }
 
+    const removeAllProduct = async() =>{
+        const response = await Axios.delete(`http://localhost:5000/api/cart/delete/all`)
+        console.log(response.statusText)
+    } 
     if(data.length < 1){
         return <div>Loading...</div>
     }
   return (
-    <section className='w-screen h-max p-10'>
+    <section className='w-screen h-max flex flex-col pl-10 pr-10'>
+        <Navbar/>
         {
             data.map((item,index) =>{
                 return <div key={index} className='w-full rounded-[5px] mt-10 flex items-center justify-between bg-red-200'>
@@ -48,8 +60,8 @@ const Buypage = () => {
             <hr />
             <h1 className='font-bold text-2xl text-end mt-4 text-red-400' >Total Cost:10000</h1>
             <div className='flex gap-5 justify-end mt-4'>
-                <button className='pl-5 pr-4 pt-4 pb-4 bg-green-500 text-white rounded-[5px] font-bold'>Order Now</button>
-                <button className='pl-7 pr-7 pt-4 pb-4 border-2 bg-red-200 border-red-500 text-red-500 rounded-[5px] font-bold'>Remove All</button>
+                <button className='pl-5 pr-4 pt-2 pb-2 bg-green-500 text-white rounded-[5px] font-bold cursor-pointer'>Order Now</button>
+                <button className='pl-7 pr-7 pt-1 pb-1 border-2 bg-red-200 border-red-500 text-red-500 rounded-[5px] font-bold cursor-pointer' onClick={removeAllProduct} >Remove All</button>
             </div>
         </div>
     </section>
