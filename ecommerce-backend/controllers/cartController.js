@@ -41,10 +41,8 @@ const getCartItems = async(req,res) =>{
 }
 
 const deleteProduct = async(req,res) =>{
-    const {id} = req.params.id;
-
-    try{
-
+    try{ 
+        const {id} = req.params.id;
         const product = await Carts.findOne({id});
         if(product){
             product.quantity -=1;
@@ -63,5 +61,22 @@ const deleteProduct = async(req,res) =>{
     }
 }
 
-module.exports = {addProductToCart,getCartItems,deleteProduct};
+const removeAll = async(req,res) =>{
+    try{
+
+        const products = await Carts.find({});
+        if(products){
+            await Carts.deleteMany({products});
+            return res.status(200).json({message:"Successfully deleted"});
+        }
+        else{
+            return res.status(400).json({message:"There is no data in the database"});
+        }
+    }
+    catch(err){
+        return status(500).json(err);
+    }
+}
+
+module.exports = {addProductToCart,getCartItems,deleteProduct,removeAll};
 

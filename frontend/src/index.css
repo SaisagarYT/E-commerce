@@ -1,3 +1,9 @@
+:root {
+  --white-black-diagonal: linear-gradient(45deg, white 50%, black 50%);
+  --bg-red:red;
+}
+
+
 .animate-marquee {
   animation: marquee 10s linear infinite;
 }

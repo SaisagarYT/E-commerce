@@ -44,17 +44,17 @@ const OrderPage = () => {
               <i className="fa-solid fa-star text-[12px]"></i>
               <p className='text-[14px]'>{data.rating}</p>
             </div>
-            <p className='text-2xl font-bold'>{data.price}$</p>
+            <p className='text-2xl font-bold'><i class="fa-solid fa-indian-rupee-sign"></i>{data.price}</p>
           </div>
           <div className='relative pb-10 pt-5'>
             <hr />
             <p className='absolute top-2 bg-white right-10'>Select Color</p>
           </div>
           <div className='list-none flex gap-4'>
-            <li className='w-8 h-8 rounded-[50%] bg-red-500'></li>
-            <li className='w-8 h-8 rounded-[50%] bg-blue-400'></li>
-            <li className='w-8 h-8 rounded-[50%] bg-orange-400'></li>
-            <li className='w-8 h-8 rounded-[50%] bg-green-500'></li>
+            <li className='w-8 h-8 rounded-[50%] bg-red-800'></li>
+            <li className='w-8 h-8 rounded-[50%] bg-blue-800'></li>
+            <li className='w-8 h-8 rounded-[50%] bg-orange-900'></li>
+            <li className='w-8 h-8 rounded-[50%] bg-black'></li>
             <li></li>
           </div>
           <div className='relative pb-10 pt-5'>
@@ -70,7 +70,7 @@ const OrderPage = () => {
           <hr />
           <div className='flex items-center mt-8 gap-4'>
             <Link to={`/product/cart/${id}`} className='w-full'>
-              <button onClick={insertIntoCart} className='bg-black mb-10 text-white text-2xl w-full h-13 rounded-3xl'>Add to Cart</button>
+              <button onClick={insertIntoCart} className='bg-black mb-10 text-white text-2xl w-full h-13 rounded-3xl cursor-pointer'>Add to Cart</button>
             </Link>
           </div>
         </div>
