@@ -1,68 +1,34 @@
 import React from 'react'
-
+import AdminDsiplay from '../pages/AdminDsiplay'
 
 const Dashboard = () => {
-    // const users = async() =>{
-
-    // }
   return (
-    <div className='w-screen flex h-screen'>
-      <div className='w-[20%] h-full items-center flex flex-col bg-blue-200'>
-        <h1 className='text-3xl font-extrabold italic font-mono pt-4 pb-4'>SaiSagar</h1>
-        <div className='w-full h-1 bg-white'></div>
-        <div className='w-full h-full mt-4'>
-            <ul className='w-full h-full flex flex-col items-center gap-5'>
-                <li>Dashboard</li>
-                <li>Statistics</li>
-                <li>Users</li>
-                <li>Products</li>
-                <li>Profiles</li>
-                <li>Settings</li>
-            </ul>
+    <div className='contain w-screen h-screen flex p-3 bg-[#11191f]'>
+      <div className="sidebar w-[18%] h-full text-white flex flex-col items-center justify-between">
+        <div className='flex w-full items-center gap-3 text-2xl'>
+            <i className="fa-solid fa-heart-pulse border-1 p-2 rounded-[50%] border-gray-700 flex"></i>
+            <h1>ProfitPulse</h1>
         </div>
-      </div>
-      <div className='w-[80%] h-full pl-20 pr-20 flex flex-col justify-around'>
-        <div className='flex w-full justify-center'>
-            <h1 className='text-8xl font-extrabold text-shadow-[0px_4px_5px] pt-10 bg-[var(--white-black-diagonal)] text-shadow-stone-300'>SHOP.CO</h1>
-        </div>
-        <div className='w-full flex justify-between mt-5'>
-            <div className='w-52 h-35 bg-blue-400 rounded-2xl p-2 flex flex-col items-center text-white justify-between'>
-                <div >
-                   <p className='font-bold text-2xl'>30</p> 
-                </div>
-                <div>
-                    <p className='font-medium text-2xl'>Products</p>
-                </div>
-            </div>
-            <div className='w-52 h-35 bg-purple-700 rounded-2xl p-2 flex flex-col items-center text-white justify-between'>
-                <div >
-                   <p className='font-bold text-2xl'>3</p> 
-                </div>
-                <div>
-                    <p className='font-medium text-2xl'>USERS</p>
-                </div>
-            </div>
-            <div className='w-52 h-35 bg-green-500 rounded-2xl p-2 text-white flex flex-col items-center justify-between'>
-                <div>
-                   <p className='font-bold text-2xl'>62</p> 
-                </div>
-                <div>
-                    <p className='font-medium text-2xl'>ORDERS</p>
-                </div>
-            </div>
-            <div className='w-52 h-35 bg-red-400 rounded-2xl p-2  text-white flex flex-col items-center justify-between'>
-                <div>
-                   <p className='font-bold text-2xl'>29%</p> 
-                </div>
-                <div>
-                    <p className='font-medium text-2xl'>GROWTH</p>
-                </div>
-            </div>
-        </div>
-        <div className='w-full h-70 bg-orange-300'>
 
+        <ul className='w-full flex flex-col gap-8 pl-7'>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-house"></i><p>Dashboard</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-brands fa-first-order"></i><p>Orders</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-credit-card"></i><p>Payments</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-person"></i><p>Customers</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-flag"></i><p>Reports</p></li>
+        </ul>
+        <ul className='w-full flex flex-col gap-8 pl-7'>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-bell"></i><p>Notification</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i className="fa-solid fa-circle-info"></i><p>Help</p></li>
+            <li className='flex items-center gap-3 cursor-pointer'><i class="fa-solid fa-gear"></i><p>Settings</p></li>
+        </ul>
+
+        <div className='flex gap-3 text-[20px] w-full pl-7 cursor-pointer'>
+            <i class="fa-solid fa-right-from-bracket rotate-180"></i>
+            Logout
         </div>
       </div>
+      <AdminDsiplay/>
     </div>
   )
 }
