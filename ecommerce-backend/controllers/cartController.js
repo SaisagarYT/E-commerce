@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Carts = require('../models/Cart');
-const Cart = require('../models/Cart');
 
 const addProductToCart = async(req,res) =>{
     const {product,name,image,price,quantity} = req.body;
@@ -42,22 +41,23 @@ const getCartItems = async(req,res) =>{
 
 const deleteProduct = async(req,res) =>{
     try{ 
-        const {id} = req.params.id;
-        const product = await Carts.findOne({id});
-        if(product){
-            product.quantity -=1;
-            if(product.quantity < 1){
-                await Carts.findOneAndDelete({id});
-            }
-            product.save();
-            return res.status(200).json({message:"Deleted the product"});
+        const {id} = req.params;
+        const product = await Carts.findById(id);
+        if(!products){
+            return res.satus(404).json({message:"Product not found"});
+        }
+        if(product.quantity <= 1){
+            await Carts.findByIdAndDelete(id);
+            return res.status(200).json({message:"Product permanetly deleted"});
         }
         else{
-            return res.status(400).json({message:"No products present in the cart"});
+            product.quantity =-1;
+            await product.save();
+            return res.status(200).json({message:"Product is decremented "});
         }
     }
     catch(err){
-        return res.status(500).json({error:"Internal server error"});
+        return res.status(500).json({error:err.message});
     }
 }
 
@@ -65,16 +65,16 @@ const removeAll = async(req,res) =>{
     try{
 
         const products = await Carts.find({});
-        if(products){
-            await Carts.deleteMany({products});
-            return res.status(200).json({message:"Successfully deleted"});
+        if(products.length === 0){
+            return res.status(400).json({message:"There is no data in the database"});
         }
         else{
-            return res.status(400).json({message:"There is no data in the database"});
+            await Carts.deleteMany();
+            return res.status(200).json({message:"Successfully deleted"});
         }
     }
     catch(err){
-        return status(500).json(err);
+        return res.status(500).json(err.message);
     }
 }
 

@@ -4,9 +4,9 @@ import UserReviews from '../components/userReviews'
 const Footer = () => {
    {
     return (
-      <div className='w-full max-md:h-[400vh] flex flex-col justify-between'>
+      <div className='w-full max-md:h-[400vh] max-sm:h-max flex flex-col justify-between'>
         <h1 className='font-extrabold text-5xl pl-20 max-md:pl-10'>OUR HAPPY CUSOTMERS</h1>
-        <div className='h-80 cursor-pointer flex justify-center items-center max-md:flex-col' >
+        <div className='h-80 cursor-pointer flex justify-center items-center max-md:flex-col'>
           <UserReviews rating="4" name="saisagar" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus alias ad tempore repellat similique, delectus odit. Provident sunt dicta pariatur, cum, nemo tempora perferendis delectus sint sapiente temporibus ratione velit!"/>
           <UserReviews rating="4" name="saisagar" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus alias ad tempore repellat similique, delectus odit. Provident sunt dicta pariatur, cum, nemo tempora perferendis delectus sint sapiente temporibus ratione velit!"/>
           <UserReviews rating="4" name="saisagar" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus alias ad tempore repellat similique, delectus odit. Provident sunt dicta pariatur, cum, nemo tempora perferendis delectus sint sapiente temporibus ratione velit!"/>

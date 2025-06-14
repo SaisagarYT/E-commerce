@@ -38,4 +38,40 @@ section div li{
     padding-bottom: 10px;
 }
 
+.remove-popup{
+  position:absolute;
+  top: 100px;
+  animation-name: sidePopup;
+  animation-duration: 3s;
+  animation-timing-function: ease-out;
+}
+
+.notify-loading::after{
+  content: " ";
+  background-color: red;
+  width: 0px;
+  height:10px;
+  position: absolute;
+  animation: notify-load;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+}
+
+@keyframes notify-load {
+  to{
+    width: 100%;
+  }
+}
+
+@keyframes sidePopup {
+  from{
+    transform: translateX(-100px);
+    opacity: 0.2;
+  }
+  to{
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
 @import "tailwindcss";
