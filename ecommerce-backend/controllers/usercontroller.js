@@ -45,7 +45,6 @@ const userLogin = async(req,res) =>{
 
     try{
         const user = await Users.findOne({email});
-
         if(user && await bcrypt.compare(password,user.password)){
             return res.json({user,token:generateToken(user._id)});
         }
@@ -57,12 +56,17 @@ const userLogin = async(req,res) =>{
 }
 
 const getUsers = async(req,res) =>{
-    const user = Users.find();
-    if(!user){
-        return res.status(400).json({message:"Users not exist"});
+    try{
+        const user = await Users.find();
+        if(!user){
+            return res.status(400).json({message:"Users not exist"});
+        }
+        else{
+            return res.status(200).json(user);
     }
-    else{
-        return res.status(200).json(user);
+    }
+    catch(err){
+        console.log("Error in user fetch all data",err.message);
     }
 }
 

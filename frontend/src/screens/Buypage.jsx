@@ -43,7 +43,15 @@ const Buypage = () => {
         handleData();
     } 
     if(data.length < 1){
-        return <div>Loading...</div>
+        return(
+            <div className='w-screen h-screen items-center flex justify-center flex-col'>
+                <Navbar/>
+                <div className='w-screen h-screen items-center flex justify-center flex-col'>
+                    <h1 className='pl-10 pr-10 pt-2 pb-4 bg-black text-white text-8xl font-extrabold rounded-tl-2xl rounded-br-2xl'>EMPTY</h1>
+                    <p className='mt-4 text-2xl'>Please don't Keep me empty....</p>
+                </div>
+            </div>
+        );
     }
   return (
     <section className='w-screen h-max flex flex-col pl-10 pr-10'>
@@ -78,7 +86,7 @@ const Buypage = () => {
             </div>
         </div>
         {
-            remove && <div className='pl-6 pr-6 pt-4 pb-4 relative bg-green-200 text-green-500 rounded-[5px] remove-popup overflow-hidden'>
+            remove && <div className='pl-6 pr-6 pt-4 pb-4 relative bg-green-300 text-green-800 rounded-[5px] remove-popup overflow-hidden'>
                 <div className='notify-loading w-full h-3 bg-green-500 absolute top-0 left-0'></div>
                 <p>Successfully Item removed from the cart !</p>
             </div>

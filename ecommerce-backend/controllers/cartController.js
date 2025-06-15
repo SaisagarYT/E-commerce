@@ -41,17 +41,17 @@ const getCartItems = async(req,res) =>{
 
 const deleteProduct = async(req,res) =>{
     try{ 
-        const {id} = req.params;
+        const id = req.params.id;
         const product = await Carts.findById(id);
-        if(!products){
-            return res.satus(404).json({message:"Product not found"});
+        if(!product){
+            return res.status(404).json({message:"Product not found"});
         }
         if(product.quantity <= 1){
             await Carts.findByIdAndDelete(id);
             return res.status(200).json({message:"Product permanetly deleted"});
         }
         else{
-            product.quantity =-1;
+            product.quantity -=1;
             await product.save();
             return res.status(200).json({message:"Product is decremented "});
         }

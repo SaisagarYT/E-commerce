@@ -44,7 +44,6 @@ const createManyProducts = async(req,res) =>{
 const deleteProduct = async(req,res) =>{
     const id = req.params.id;
     try{
-
         const product = await Products.findOneAndDelete({_id:id});
     
         if(!product){

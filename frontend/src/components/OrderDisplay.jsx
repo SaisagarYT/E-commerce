@@ -2,8 +2,8 @@ import React from 'react'
 
 const OrderDisplay = () => {
   return (
-    <div className='w-full bg-red-200 mt-5'>
-      <table className='w-full'>
+    <div className='w-full mt-5'>
+      <table className='w-full text-center'>
         <thead>
             <tr className='border-b border-gray-500'>
                 <th className='px-4 py-4'>OrderId</th>
@@ -20,6 +20,7 @@ const OrderDisplay = () => {
             <td className="px-4 py-2">Shipped</td>
             <td className="px-4 py-2">$250.00</td>
             <td className="px-4 py-2">2025-06-14</td>
+            <td className='text-2xl font-bold'>...</td>
             </tr>
         </tbody>
       </table>
