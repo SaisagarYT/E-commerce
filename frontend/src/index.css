@@ -48,7 +48,7 @@ section div li{
 
 .notify-loading::after{
   content: " ";
-  background-color: red;
+  background-color: green;
   width: 0px;
   height:10px;
   position: absolute;
@@ -72,6 +72,15 @@ section div li{
     transform: translateX(0px);
     opacity: 1;
   }
+}
+
+.dashboard-btns li:hover{
+  background-color: #faf3ec;
+  color: black;
+}
+
+.active{
+  visibility: visible;
 }
 
 @import "tailwindcss";

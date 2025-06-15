@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Users = require('../models/user');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const protect = async(req,res,next) =>{
     let token;
