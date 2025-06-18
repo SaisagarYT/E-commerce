@@ -1,8 +1,18 @@
 :root {
   --white-black-diagonal: linear-gradient(45deg, white 50%, black 50%);
   --bg-red:red;
+  --bg-shadow:rgb(206, 206, 206);
 }
 
+#box {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+  max-height: 400px; /* fully visible initially */
+}
+
+#box.hidden {
+  max-height: 0;
+}
 
 .animate-marquee {
   animation: marquee 10s linear infinite;

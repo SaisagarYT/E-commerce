@@ -8,11 +8,15 @@ const Navbar = () => {
     banner.style.visibility="hidden";
   }
   const [data,setData] = useState([]);
-
+  const token = localStorage.getItem('token');
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/cart/get');
+        const response = await axios.get('http://localhost:5000/api/cart/get',{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        });
         setData(response.data);
       } catch (error) {
         console.error("Failed to fetch cart data", error);

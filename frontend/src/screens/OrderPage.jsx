@@ -4,10 +4,9 @@ import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 const OrderPage = () => {
-
   const {id} = useParams();
   const [data,setData] = useState(null);
-
+  const token = localStorage.getItem('token');
   useEffect( () => {
     const finalData = async() =>{
       const response = await Axios.get(`http://localhost:5000/api/products/${id}`);
@@ -15,10 +14,20 @@ const OrderPage = () => {
     }
     finalData();
   },[id]);
-
   const insertIntoCart = async() =>{
-    const response = await Axios.post('http://localhost:5000/api/cart/add',data);
-    console.log(response.data);
+    const productData = {
+      product:data._id,
+      name:data.name,
+      image:data.image,
+      price:data.price,
+      quantity:1
+    }
+    const response = await Axios.post('http://localhost:5000/api/cart/add',productData,{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      }
+    });
+    console.log(response.statusText)
   }
 
   if(!data){
@@ -70,7 +79,7 @@ const OrderPage = () => {
           <hr />
           <div className='flex items-center mt-8 gap-4'>
             <Link to={`/product/cart/${id}`} className='w-full'>
-              <button onClick={insertIntoCart} className='bg-black mb-10 text-white text-2xl w-full h-13 rounded-3xl cursor-pointer'>Add to Cart</button>
+              <button onClick={insertIntoCart}className='bg-black mb-10 text-white text-2xl w-full h-13 rounded-3xl cursor-pointer'>Add to Cart</button>
             </Link>
           </div>
         </div>

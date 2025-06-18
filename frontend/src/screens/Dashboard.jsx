@@ -1,8 +1,13 @@
 import React from 'react'
 import AdminDsiplay from '../pages/AdminDsiplay'
-import { NavLink } from 'react-router-dom'
+import { Navigate, NavLink } from 'react-router-dom'
 
 const Dashboard = () => {
+  const logout = () =>{
+    console.log("Logouted")
+    localStorage.removeItem('token');
+    window.location.href = "/login";
+  }
   return (
     <div className='contain w-screen h-screen flex p-3 bg-[#11191f]'>
       <div className="sidebar w-[18%] h-full text-white flex flex-col items-center justify-between">
@@ -38,7 +43,7 @@ const Dashboard = () => {
             <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2'><i class="fa-solid fa-gear"></i><p>Settings</p></li>
         </ul>
 
-        <div className='flex gap-3 text-[20px] w-full pl-7 cursor-pointer'>
+        <div className='flex gap-3 text-[20px] w-full pl-7 cursor-pointer' onClick={logout}>
             <i class="fa-solid fa-right-from-bracket rotate-180"></i>
             Logout
         </div>
