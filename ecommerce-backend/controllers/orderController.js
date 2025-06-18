@@ -7,11 +7,10 @@ const addOrderItems = async(req,res) =>{
     paymentMethod,
     itemsPrice,
     taxPrice,
-    shippingPrice,
     totalPrice
     } = req.body;
 
-    if(!orderItems && orderItems.length === 0){
+    if(!orderItems || orderItems.length === 0){
         return res.status(400).json({message:"No order items"});
     }
 
@@ -22,7 +21,6 @@ const addOrderItems = async(req,res) =>{
         paymentMethod,
         itemsPrice,
         taxPrice,
-        shippingAddress,
         totalPrice
     });
 
@@ -52,7 +50,7 @@ const updateOrderToPaid = async(req,res) =>{
         order.paymentResult = {
             id:req.body.id,
             status:req.body.status,
-            update_tiem:req.body.update_tiem,
+            update_time:req.body.update_item,
             email_address:req.body.payer.email_address
         }
         const updatedOrder = await order.save();
@@ -64,13 +62,12 @@ const updateOrderToPaid = async(req,res) =>{
 }
 
 const getMyOrders = async(req,res) =>{
-    const orders = await Orders.find({user:req.user._id});
-
+    const orders = await Orders.find({}).populate('user','name email');
     return res.json(orders);
 }
 
 const getAllOrders = async(req,res) =>{
-    const orders = await Orders.find();
+    const orders = await Orders.find({user:req.user.id}).populate('user','name email');
     return res.status(200).json(orders);
 }
 

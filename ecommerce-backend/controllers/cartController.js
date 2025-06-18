@@ -2,23 +2,23 @@ const mongoose = require('mongoose');
 const Carts = require('../models/Cart');
 
 const addProductToCart = async(req,res) =>{
+    const userId = req.user;
     const {product,name,image,price,quantity} = req.body;
-
     try{
-
-        const isExist = await Carts.findOne({image});
-        if(isExist && isExist.image === image){
+        const isExist = await Carts.findOne({user: userId, image});
+        if(isExist){
             isExist.quantity = isExist.quantity + 1;
             await isExist.save();
             return res.status(200).json({message:"quantity incremented"});
         }
         else{
             const addProduct = new Carts({
+                user:userId,
                 product,
                 name,
                 image,
                 price,
-                quantity:1
+                quantity:quantity || 1
             })
             await addProduct.save();
             return res.status(200).json({message:"Item added to cart"});
@@ -30,12 +30,12 @@ const addProductToCart = async(req,res) =>{
 }
 
 const getCartItems = async(req,res) =>{
-    const products = await Carts.find();
-    if(products){
-        return res.status(200).json(products);
+    const products = await Carts.find({user:req.user});
+    if(!products){
+        return res.status(400).json({error:"No items in the cart"});
     }
     else{
-        return res.status(400).json({error:"No items in the cart"});
+        return res.status(200).json(products);
     }
 }
 
@@ -61,15 +61,32 @@ const deleteProduct = async(req,res) =>{
     }
 }
 
+const deleteCompleteProduct = async(req,res) =>{
+    const id = req.params.id;
+    try{
+        const isExist = await Carts.findById(id);
+        if(isExist){
+            await Carts.findByIdAndDelete(id);
+            return res.status(200).json({message:"Product deleted completely"});
+        }
+        else{
+            return res.status(400).json({message:"There is no product"});
+        }
+    }
+    catch(err){
+        console.log("error in backend:",err.message);
+    }
+}
+
 const removeAll = async(req,res) =>{
     try{
-
-        const products = await Carts.find({});
+        const products = await Carts.find({user:req.user});
+        console.log(products)
         if(products.length === 0){
             return res.status(400).json({message:"There is no data in the database"});
         }
         else{
-            await Carts.deleteMany();
+            await Carts.deleteMany({});
             return res.status(200).json({message:"Successfully deleted"});
         }
     }
@@ -78,5 +95,5 @@ const removeAll = async(req,res) =>{
     }
 }
 
-module.exports = {addProductToCart,getCartItems,deleteProduct,removeAll};
+module.exports = {addProductToCart,getCartItems,deleteProduct,removeAll,deleteCompleteProduct};
 

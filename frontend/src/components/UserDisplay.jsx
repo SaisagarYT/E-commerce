@@ -7,12 +7,12 @@ const CustomerDisplay = () => {
     useEffect(() =>{
         const userFetch = async() =>{
             try{
-                    const response = (await Axios.get('http://localhost:5000/api/users',{
-                        headers:{
-                            Authorization:`Bearer ${localStorage.getItem("token")}`
-                        }
-                    }));
-                    setUserData(response.data);
+                const response = await Axios.get('http://localhost:5000/api/users',{
+                    headers:{
+                        Authorization:`Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+                setUserData(response.data);
                 }
                 catch(err){
                     console.log("error is:",err);
