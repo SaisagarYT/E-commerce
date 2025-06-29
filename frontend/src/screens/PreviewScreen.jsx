@@ -23,9 +23,9 @@ const PreviewScreen = () => {
         </ul>
       </span>
 
-      <ShopingList title="NEW ARRIVALS"/>
-      <ShopingList title="TOP SELLINGS"/>
-      <ShopingList title="ON SALE"/>
+      <ShopingList title="NEW ARRIVALS" type="new"/>
+      <ShopingList title="TOP SELLINGS" type="top"/>
+      <ShopingList title="ON SALE" type="sale"/>
       
     </div>
   )

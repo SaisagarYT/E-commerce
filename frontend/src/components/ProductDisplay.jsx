@@ -3,10 +3,15 @@ import React, { useEffect, useState} from 'react'
 
 const ProductDisplay = () => {
     const [data, setData] = useState([]);
+    const token = localStorage.getItem('token');
     useEffect(() =>{
         const fetchData = async() =>{
             try{
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await axios.get('http://localhost:5000/api/products',{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            });
                 setData(response.data);
             }
             catch(err){

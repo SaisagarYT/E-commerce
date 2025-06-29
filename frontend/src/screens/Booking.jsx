@@ -1,11 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom';
 import DeliveryAddress from '../components/DeliveryAdddress.jsx'
 import PaymentOptions from '../components/PaymentOptions';
 import OrderSummary from '../components/OrderSummary';
+import axios from 'axios';
 
 const Booking = () => {
-
+  const token = localStorage.getItem('token');
+  useEffect(() =>{
+    const placeOrder = async() =>{
+      try{
+        const res = await axios.post("http://localhost:5000/api/products",{},{
+          headers:{
+            Authorization:`Bearer ${token}`,
+          }
+        })
+      }
+      catch(err){
+        console.log(err.message);
+      }
+    }
+    placeOrder();
+  },[])
   const [box, setBox] = useState(null);
   const tabs = [
     {id:1,title:"DELIVERY ADDRESS",content:<DeliveryAddress next={() => setBox(2)}/>},
