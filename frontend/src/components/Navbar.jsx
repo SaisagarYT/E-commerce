@@ -37,18 +37,21 @@ const Navbar = () => {
           <h1 className='font-bold text-4xl cursor-pointer'>SHOP.CO</h1>
         </Link>
         <ul className='flex gap-6 max-md:hidden text-[15px]'>
-          <li>Shop</li>
-          <li>New Arrivel</li>
-          <li>Top Selling</li>
-          <li>On Sale</li>
+          <Link to='/shop'><li className='cursor-pointer'>Shop</li></Link>
+          <Link to='/newarrivel'><li className='cursor-pointer'>New Arrivel</li></Link>
+          <Link to='/topselling'><li className='cursor-pointer'>Top Selling</li></Link>
+          <Link to='/onsale'><li className='cursor-pointer'>On Sale</li></Link>
         </ul>
         <span className='flex w-[45%] items-center h-10 rounded-2xl bg-gray-200 max-md:gap-2'>
           <label className='text-[20px] w-[10%] pl-3' htmlFor="search-bar"><i className="fa-solid fa-magnifying-glass"></i></label>
           <input className='w-[90%] h-full outline-0' placeholder='Search for products...' type="text" name='search-bar'/>
         </span>
+        <Link to='/profile'>
+          <i className="fa-solid fa-circle-user text-[22px] cursor-pointer"></i>
+        </Link>
         <Link to='/product/cart/:id'>
-          <label className='text-2xl cursor-pointer' htmlFor="search-bar">
-            <p className='bg-black w-8 h-8 flex items-center justify-center text-white pl-2 pr-2 pb-2 pt-2 rounded-[50%]'>{data.length}</p>
+          <label className='text-[20px] cursor-pointer relative' htmlFor="search-bar">
+            <p className='bg-black w-3 h-3 flex items-center justify-center absolute top-[-10px] left-2 text-[12px] text-white pl-2 pr-2 pb-2 pt-2 rounded-[50%]'>{data.length}</p>
             <i className="fa-solid fa-cart-shopping"></i>
           </label>
         </Link>

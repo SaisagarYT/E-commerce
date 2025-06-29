@@ -59,7 +59,10 @@ const productSchmea = mongoose.Schema({
         required: true,
         default: 0,
     },
+    productType:{
+        type:String,
+    }
 },
-{Timestamps:true});
+{timestamps:true});
 
 module.exports = mongoose.model('Product',productSchmea);

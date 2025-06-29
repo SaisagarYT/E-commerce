@@ -23,7 +23,7 @@ const ShopingList = (props) => {
         <h1 className='font-extrabold text-4xl mt-15'>{props.title}</h1>
         <div className='w-full flex gap-8 justify-center mt-5 pt-5 flex-wrap cursor-pointer' data-aos="zoom-out-right">
          {
-          data.map((item,index) => <Link key={index} to={`/product/detail/${item._id}`}>
+          data.map((item,index) => item.productType == props.type && index < 30? <Link key={index} to={`/product/detail/${item._id}`}>
             <div  className='w-50 rounded-2xl h-70 box overflow-hidden border border-gray-400 shadow-2xl' onMouseLeave={(e) => e.currentTarget.classList.remove('rotate-temp')} onMouseEnter={(e) => e.currentTarget.classList.add('rotate-temp')}>
               <img className='w-full h-[60%] object-cover' src={item.image} alt="" />
               <div className='w-full p-2'>
@@ -36,11 +36,11 @@ const ShopingList = (props) => {
                 </div>
                 <div className='flex w-full justify-between items-center pl-1 pr-4'>
                   <p className='text-gray-500 text-[12px]'>{item.numReviews}reviews</p>
-                  <p className='font-bold'>{item.price}$</p>
+                  <p className='font-bold'>{item.price}<i className="fa-solid fa-indian-rupee-sign text-[12px]"></i></p>
                 </div>
               </div>
           </div>
-          </Link> )
+          </Link> : "")
          } 
         </div>
       </section>

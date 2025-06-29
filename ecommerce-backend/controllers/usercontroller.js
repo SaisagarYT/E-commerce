@@ -90,4 +90,13 @@ const updateUser = async(req,res) =>{
     }
 }
 
-module.exports = {userRegister,userLogin,updateUser,deleteUser,getUsers};
+const getOneUser = async(req,res) =>{
+    const {id} = req.params.id;
+    const user = await Users.findOne(id);
+    if(!user){
+        return res.status(400).json({message:"User not found"});
+    }
+    return res.status(200).json(user);
+}
+
+module.exports = {userRegister,userLogin,updateUser,deleteUser,getUsers,getOneUser};
