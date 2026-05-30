@@ -10,14 +10,14 @@ const Dashboard = () => {
   }
   return (
     <div className='contain w-screen h-screen flex p-3 bg-[#11191f]'>
-      <div className="sidebar w-[18%] h-full text-white flex flex-col items-center justify-between">
+      <div className="sidebar w-[13%] h-full text-white flex flex-col items-center justify-between">
         <div className='flex w-full items-center gap-3 text-2xl'>
             <i className="fa-solid fa-heart-pulse border-1 p-2 rounded-[50%] border-gray-700 flex"></i>
             <h1>ProfitPulse</h1>
         </div>
 
         <ul className='dashboard-btns w-full flex flex-col gap-4'>
-          <NavLink to='/admin'>
+          <NavLink to='/admin/dashboard'>
             <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2 rounded-l-2xl transition-all duration-150'><i className="fa-solid fa-house"></i><p>Dashboard</p></li>
           </NavLink>
 

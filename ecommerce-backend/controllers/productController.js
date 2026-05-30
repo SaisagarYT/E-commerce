@@ -21,12 +21,20 @@ const getProductById = async(req,res) =>{
 const createProduct = async(req,res) =>{
     const {user,name,image,brand,category,description,price,countInStock,rating,numReviews} = req.body;
 
-    const product = new Products({
-        user,name,image,brand,category,description,price,countInStock,rating,numReviews
-    })
+    if(!user || !name || !image ||! brand || !category || !description || !price || !countInStock || !rating || !numReviews){
+        return res.status(404).json({message:"Require all the credentials."})
+    }
+    try{
+        const product = new Products({
+            user,name,image,brand,category,description,price,countInStock,rating,numReviews
+        })
+        const createdProduct = await product.save();
+    }
+    catch(err){
+        return res.status(500).json({ERROR:"Internal server error"});
+    }
 
-    const createdProduct = await product.save();
-    return res.status(200).json(createdProduct);
+    return res.status(201).json(createdProduct);
 }
 
 const createManyProducts = async(req,res) =>{

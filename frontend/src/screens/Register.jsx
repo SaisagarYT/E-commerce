@@ -1,16 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import city from '../assets/pexels-misael-garcia-832776-1707820.jpg';
-const Register = () => {
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [c_pass, setCpass] = useState('');
-    const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name,setName] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/users/register', {
@@ -19,60 +18,65 @@ const Register = () => {
         password,
       });
       localStorage.setItem("token", res.data.token);
-      window.alert("Login successful");
-      navigate('/login');
+      navigate('/');
     } catch (err){
       console.error(err.response?.data?.message || err.message);
       alert('Login failed');
     }
   };
+
   return (
-    <div className='w-screen h-screen flex justify-center items-center rounded-2xl'>
-        <img src={city} className='w-80 h-120.5 rounded-bl-2xl rounded-tl-2xl' alt="img" />
-        <form onSubmit={handleLogin} className='flex flex-col gap-3 items-center w-100 h-120 border p-2'>
+    <div className='w-screen h-screen flex justify-between bg-gray-100  items-center rounded-2xl'>
+      <div className='w-1/2 relative'>
+        <div className='w-full h-full flex-col bg-gray-900 absolute flex justify-center items-center opacity-80'>
+          <h1 className='text-4xl font-bold text-white'>Welcome back to Fastrail</h1>
+          <p className='text-xl text-white w-1/2 text-center pt-5'>Fresh groceries and organic produce, delivered to your doorstep.</p>
+        </div>
+        <img src={city} className='w-full object-cover ' alt="img" />
+      </div>
+        <form onSubmit={handleLogin} className='flex px-60 flex-col gap-3 items-center w-1/2 h-full justify-center border p-2'>
+          <h1 className='font-bold text-2xl'>Sign up for an account</h1>
+          <p className='text-sm'>Already have an account? <a className='underline font-medium' href='/login'>Sign in</a></p>
+          <div className='w-full flex flex-col gap-2'>
+            <h1 className='text-sm font-medium'>Name</h1>
             <input 
-                className='w-full border h-10 outline-0 rounded-[5px] indent-2'
+                className='w-full bg-white text-sm border font-normal h-10 outline-0 rounded-[5px] indent-2'
                 type="text" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
+                placeholder="Your name"
                 required
             />
-        <input 
-            className='w-full border h-10 outline-0 rounded-[5px] indent-2'
-            type="email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-        />
-        <input 
-            className='w-full border h-10 outline-0 rounded-[5px] indent-2'
-            type="password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-        />
-        <input 
-            className='w-full border h-10 outline-0 rounded-[5px] indent-2'
-            type="password" 
-            value={c_pass}
-            onChange={(e) => setCpass(e.target.value)}
-            placeholder="Confirm Password"
-            required
-        />
-        <button className='w-full bg-black text-white h-10 cursor-pointer' type="submit">Login</button>
-        <div className='w-full flex flex-col justify-between h-[40%]'>
-            <a href="/forget" className='text-blue-900 hover:underline'>Forget password?</a>
-            <div className=''>
-            <p className='text-center text-[14px]'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellendus tempore, voluptate ea?</p>
-            <p className='text-center text-[12px]'>All rights are reserved by SGSS.</p>
-            </div>
-        </div>
+          </div>
+          <div className='w-full flex flex-col gap-2'>
+            <h1 className='text-sm font-medium'>Email Address</h1>
+            <input 
+                className='w-full bg-white text-sm border font-normal h-10 outline-0 rounded-[5px] indent-2'
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+            />
+          </div>
+          <div className='w-full flex flex-col gap-2'>
+            <h1 className='text-sm font-medium'>Password</h1>
+            <input 
+                className='w-full border h-10 bg-white outline-0 text-sm rounded-[5px] indent-2'
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+            />
+          </div>
+          <button className='w-full mt-2 bg-black text-white h-12 rounded-2xl cursor-pointer' type="submit">Login</button>
+          <div className='w-full flex flex-col justify-between '>
+            <a href="/forget" className=' underline font-medium text-sm text-center'>Forget password?</a>
+          </div>
         </form>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Login;
