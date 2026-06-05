@@ -19,14 +19,13 @@ const Login = () => {
       navigate('/');
     } catch (err){
       console.error(err.response?.data?.message || err.message);
-      alert('Login failed');
     }
   };
 
   return (
     <div className='w-screen h-screen flex justify-between bg-gray-100  items-center rounded-2xl'>
       <div className='w-1/2 relative'>
-        <div className='w-full h-full flex flex-col bg-gray-900 absolute flex justify-center items-center opacity-80'>
+        <div className='w-full h-full flex flex-col bg-gray-900 absolute justify-center items-center opacity-80'>
           <h1 className='text-4xl font-bold text-white'>Welcome back to Fastrail</h1>
           <p className='text-xl text-white w-1/2 text-center pt-5'>Fresh groceries and organic produce, delivered to your doorstep.</p>
         </div>

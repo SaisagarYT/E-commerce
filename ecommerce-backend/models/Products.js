@@ -15,6 +15,9 @@ const productSchmea = mongoose.Schema({
         required:true,
         default:'/images/sample.jpg',
     },
+    images: [{
+        type:String,
+    }],
     brand: {
         type: String,
         required: true,
@@ -32,11 +35,46 @@ const productSchmea = mongoose.Schema({
         required: true,
         default: 0,
     },
+    discountedPrice: {
+        type: Number,
+        default: 0,
+    },
     countInStock: {
         type: Number,
         required: true,
         default: 0,
     },
+    taxIncluded: {
+        type: String,
+        default: '',
+    },
+    startDate: {
+        type: String,
+        default: '',
+    },
+    endDate: {
+        type: String,
+        default: '',
+    },
+    stockStatus: {
+        type: String,
+        default: '',
+    },
+    unlimited: {
+        type: Boolean,
+        default: false,
+    },
+    featured: {
+        type: Boolean,
+        default: false,
+    },
+    sizeType: {
+        type: String,
+        default: '',
+    },
+    sizes: [{
+        type: String,
+    }],
     reviews: [
     {
         name: { type: String, required: true },

@@ -1,7 +1,102 @@
 const Products = require('../models/Products');
+const cloudinary = require('../utils/cloudinary');
 
+const parseSizes = (value) => {
+    if (!value) {
+        return [];
+    }
+
+    if (Array.isArray(value)) {
+        return value;
+    }
+
+    try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
+    }
+    catch {
+        return [];
+    }
+}
+
+const createProduct = async(req,res) =>{
+    const body = req.body || {};
+    const {name,brand,category,description,price,countInStock,rating,numReviews,productType,discountedPrice,taxIncluded,startDate,endDate,stockStatus,unlimited,featured,sizeType,sizes} = body;
+    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
+    const userId = req.user?._id;
+
+    if(!userId || !name || uploadedFiles.length === 0 || !brand || !category || !description || price == undefined || countInStock == undefined || rating == undefined || numReviews == undefined){
+        return res.status(400).json({message:"All fields are required"})
+    }
+    try{
+        const imageResponses = await Promise.all(
+            uploadedFiles.map((file) => new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'products',
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                            return;
+                        }
+
+                        resolve(result);
+                    },
+                );
+
+                uploadStream.end(file.buffer);
+            }))
+        );
+
+        const imageUrls = imageResponses.map((response) => response.secure_url);
+        const parsedSizes = parseSizes(sizes);
+
+        const product = new Products({
+            user:userId,
+            name,
+            image:imageUrls[0],
+            images:imageUrls,
+            brand,
+            category,
+            description,
+            price,
+            discountedPrice,
+            countInStock,
+            taxIncluded,
+            startDate,
+            endDate,
+            stockStatus,
+            unlimited: unlimited === 'true' || unlimited === true,
+            featured: featured === 'true' || featured === true,
+            sizeType,
+            sizes: parsedSizes,
+            rating,
+            numReviews,
+            productType,
+        })
+        const createdProduct = await product.save();
+        return res.status(201).json({message:'Product created successfully', product: createdProduct});
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({ERROR:"Internal server error"});
+    }
+
+}
 const getAllProducts = async(req,res) =>{
-    const products = await Products.find({});
+    const { sort, limit } = req.query;
+    const query = Products.find({});
+
+    if (sort === 'latest') {
+        query.sort({ createdAt: -1 });
+    }
+
+    if (limit) {
+        query.limit(Number(limit));
+    }
+
+    const products = await query;
     if(!products){
         return res.status(400).json({message:"There are no products"});
     }
@@ -18,24 +113,6 @@ const getProductById = async(req,res) =>{
     return res.status(200).json(product);
 }
 
-const createProduct = async(req,res) =>{
-    const {user,name,image,brand,category,description,price,countInStock,rating,numReviews} = req.body;
-
-    if(!user || !name || !image ||! brand || !category || !description || !price || !countInStock || !rating || !numReviews){
-        return res.status(404).json({message:"Require all the credentials."})
-    }
-    try{
-        const product = new Products({
-            user,name,image,brand,category,description,price,countInStock,rating,numReviews
-        })
-        const createdProduct = await product.save();
-    }
-    catch(err){
-        return res.status(500).json({ERROR:"Internal server error"});
-    }
-
-    return res.status(201).json(createdProduct);
-}
 
 const createManyProducts = async(req,res) =>{
     try{
@@ -66,7 +143,7 @@ const deleteProduct = async(req,res) =>{
 }
 
 const updateProduct = async(req,res) =>{
-     const { name, price, description, image, brand, category, countInStock } = req.body;
+    const { name, price, description, image, images, brand, category, countInStock, discountedPrice, taxIncluded, startDate, endDate, stockStatus, unlimited, featured, productType, sizeType, sizes } = req.body;
 
      const product = await Products.findById(req.params.id);
 
@@ -75,9 +152,20 @@ const updateProduct = async(req,res) =>{
         product.price = price || product.price;
         product.description = description || product.description;
         product.image = image || product.image;
+          product.images = images || product.images;
         product.brand = brand || product.brand;
         product.category = category || product.category;
         product.countInStock = countInStock || product.countInStock;
+          product.discountedPrice = discountedPrice ?? product.discountedPrice;
+          product.taxIncluded = taxIncluded ?? product.taxIncluded;
+          product.startDate = startDate ?? product.startDate;
+          product.endDate = endDate ?? product.endDate;
+          product.stockStatus = stockStatus ?? product.stockStatus;
+          product.unlimited = unlimited ?? product.unlimited;
+          product.featured = featured ?? product.featured;
+          product.productType = productType ?? product.productType;
+        product.sizeType = sizeType ?? product.sizeType;
+        product.sizes = sizes ? parseSizes(sizes) : product.sizes;
 
         const updatedProduct = await product.save();
         return res.status(200).json(updatedProduct);

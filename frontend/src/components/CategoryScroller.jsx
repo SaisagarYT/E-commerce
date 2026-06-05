@@ -22,7 +22,7 @@ const categories = [
 const PAGE_SIZE = 8
 
 const CategoryCard = ({ title, color }) => (
-  <div className='flex w-full items-center gap-4 h-24 rounded-xl border border-gray-200 bg-white shadow-sm px-4'>
+  <div className='flex w-full items-center gap-4 h-24 rounded-xl border border-gray-200 bg-white shadow-none px-4'>
     <div className={`w-14 h-14 rounded-md flex-shrink-0 ${color}`} />
     <p className='text-lg font-medium leading-tight'>{title}</p>
   </div>
@@ -101,7 +101,7 @@ const CategoryScroller = () => {
         <button
           type='button'
           onClick={() => scrollPage(-1)}
-          className='absolute left-0 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md'
+          className='absolute left-0 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white shadow-none'
           aria-label='Scroll categories left'
         >
           <i className='fa-solid fa-angle-left text-xl text-slate-700' />
@@ -112,7 +112,7 @@ const CategoryScroller = () => {
         <button
           type='button'
           onClick={() => scrollPage(1)}
-          className='absolute right-0 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md'
+          className='absolute right-0 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white shadow-none'
           aria-label='Scroll categories right'
         >
           <i className='fa-solid fa-angle-right text-xl text-slate-700' />

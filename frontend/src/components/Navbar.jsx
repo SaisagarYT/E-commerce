@@ -8,10 +8,10 @@ const Navbar = () => {
     banner.style.visibility="hidden";
   }
   const [data,setData] = useState([]);
-  const token = localStorage.getItem('token');
   useEffect(() => {
     const fetchCart = async () => {
       try {
+        const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:5000/api/cart/get',{
           headers:{
             Authorization:`Bearer ${token}`
@@ -32,7 +32,7 @@ const Navbar = () => {
           <p className='text-[18px] cursor-pointer' onClick={bannerHandler}>x</p>
         </div>
       </span>
-      <div className='w-full h-23 flex justify-around items-center shadow-2xs sticky bg-white'>
+      <div className='w-full h-23 flex justify-around items-center shadow-none sticky bg-white'>
         <Link to='/'>
           <h1 className='font-bold text-4xl cursor-pointer'>FASTRAIL</h1>
         </Link>

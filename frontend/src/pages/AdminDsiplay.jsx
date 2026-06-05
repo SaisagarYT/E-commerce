@@ -4,6 +4,7 @@ import HomeDisplay from '../components/HomeDisplay'
 import {Routes,Route} from 'react-router-dom';
 import UserDisplay from '../components/UserDisplay';
 import ProductDisplay from '../components/ProductDisplay';
+import SettingsDisplay from '../components/SettingsDisplay';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ const AdminDsiplay = () => {
       setData(response.data);
     }
     userFetch();
-  },[])
+  },[token])
   return (
     <div className='w-full overflow-scroll h-full flex flex-col bg-gray-100 rounded-2xl p-4'> {/*bg-[#faf3ec] */}
       <div className='w-full flex flex-wrap justify-between'>
@@ -41,10 +42,11 @@ const AdminDsiplay = () => {
         </div>
       </div>
     <Routes>
-      <Route path='/dashboard' element={<HomeDisplay/>}/>
-      <Route path='/orders' element={<OrderDisplay/>}/>
-      <Route path='/customers' element={<UserDisplay/>}/>
+      <Route path='dashboard' element={<HomeDisplay/>}/>
+      <Route path='orders' element={<OrderDisplay/>}/>
+      <Route path='customers' element={<UserDisplay/>}/>
       <Route path='products' element={<ProductDisplay/>}/>
+      <Route path='settings' element={<SettingsDisplay/>}/>
     </Routes>
     </div>
   )

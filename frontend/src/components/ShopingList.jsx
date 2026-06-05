@@ -24,7 +24,7 @@ const ShopingList = (props) => {
         <div className='w-full flex gap-8 justify-center mt-5 pt-5 flex-wrap cursor-pointer' data-aos="zoom-out-right">
          {
           data.map((item,index) => item.productType == props.type && index < 30? <Link key={index} to={`/product/detail/${item._id}`}>
-            <div  className='w-50 rounded-2xl h-70 box overflow-hidden border border-gray-400 shadow-2xl' onMouseLeave={(e) => e.currentTarget.classList.remove('rotate-temp')} onMouseEnter={(e) => e.currentTarget.classList.add('rotate-temp')}>
+            <div  className='w-50 rounded-2xl h-70 box overflow-hidden border border-gray-400 shadow-none' onMouseLeave={(e) => e.currentTarget.classList.remove('rotate-temp')} onMouseEnter={(e) => e.currentTarget.classList.add('rotate-temp')}>
               <img className='w-full h-[60%] object-cover' src={item.image} alt="" />
               <div className='w-full p-2'>
                 <p className='font-medium text-[16px]'>{item.name}</p>

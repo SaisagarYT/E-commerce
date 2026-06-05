@@ -20,6 +20,18 @@ app.get('/',(req,res)=>{
     res.send("API is running...");
 })
 
+app.use((err, req, res, next) => {
+    if (err && err.name === 'MulterError') {
+        return res.status(400).json({ message: err.message });
+    }
+
+    if (err) {
+        return res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
+    }
+
+    next();
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT,() =>{

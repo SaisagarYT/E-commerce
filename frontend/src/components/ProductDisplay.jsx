@@ -1,260 +1,530 @@
-import axios from 'axios';
-import React, { useEffect, useState} from 'react'
-import { CustomButton } from '../reusableComponents/CustomButton';
-import { CustomInput } from '../reusableComponents/CustomInput';
-import { CustomDropDown } from '../reusableComponents/CustomDropDown';
-import CategoryScroller from './CategoryScroller';
+import React, { useMemo, useState } from 'react'
+import axios from 'axios'
+import { CustomButton } from '../reusableComponents/CustomButton'
+import CategoryScroller from './CategoryScroller'
+import ProductTableSection from './ProductTableSection'
 
-const ProductDisplay = () => {
-    const [products, setProducts] = useState([]);
-    const [popup, isPopup] = useState(false);
-    const [category, setCategory] = useState("");
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [sendProduct, setSendProduct] = useState({
-        user:"",
-        name:"",
-        image:"",
-        brand:"",
-        category:"",
-        description:"",
-        price:0,
-        countInStock:"",
-        raring:0,
-        numReviews:0,
-        productType:"",
-    })
-    const token = localStorage.getItem('token');
-    useEffect(() =>{
-        const fetchData = async() =>{
-            try{
-                const response = await axios.get('http://localhost:5000/api/products',{
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            });
-                setProducts(response.data);
-            }
-            catch(err){
-                console.log(err.message);
-            }
-        }
-        fetchData()
-    },[token])
+const initialDraft = {
+  name: '',
+  description: '',
+  price: '',
+  brand: '',
+  discountedPrice: '',
+  taxIncluded: '',
+  startDate: '',
+  endDate: '',
+  stockQuantity: '',
+  stockStatus: '',
+  unlimited: false,
+  featured: false,
+  category: '',
+  productTag: '',
+  sizeType: '',
+  sizes: [],
+}
 
-    const removeProduct = async(id) =>{
-        try{
-            const response = await axios.delete(`http://localhost:5000/api/products/${id}`);
-            console.log(response.status);
-            window.alert("Product deleted");
-        }
-        catch(err){
-            console.log("error is:",err.message);
-        }
-    }
+const apparelSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
+const footwearSizes = ['5', '6', '7', '8', '9', '10', '11', '12']
+const sizeAwareCategories = new Map([
+  ['Fashion', 'apparel'],
+  ['Clothing', 'apparel'],
+  ['Socks & Gloves', 'apparel'],
+  ['Shoes', 'footwear'],
+  ['Sports', 'apparel'],
+])
 
-    const addProduct = async() =>{
-        try{
-            const response = await axios.post('http://localhost:5000/api/products/',sendProduct,{
-                headers:{
-                    Authorization:`Bearer ${token}`
-                },
-            });
-            setSendProduct(response);
-        }
-        catch(err){
-            console.log('error:',err);
-        }
-    }
+const FieldShell = ({ title, children, className = '' }) => (
+  <div className={`space-y-2.5 ${className}`}>
+    <label className='text-[15px] font-semibold tracking-tight text-[#0f4b4d]'>{title}</label>
+    {children}
+  </div>
+)
 
-    const setPopup = () =>{
-        isPopup((x) => x === false ? true : false);
-        console.log(popup);
-    }
+const BaseInput = ({ className = '', ...props }) => (
+  <input
+    {...props}
+    className={`h-12 w-full rounded-[12px] border border-[#dbe2e8] bg-white px-4 text-[15px] text-[#0f4b4d] outline-none transition placeholder:text-slate-400 focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3] ${className}`}
+  />
+)
 
-    const handleCategoryChange = (e) =>{
-        setCategory(e.target.value);
-        setShowDropdown(true);
-    }
+const BaseSelect = ({ className = '', ...props }) => (
+  <select
+    {...props}
+    className={`h-12 w-full rounded-[12px] border border-[#dbe2e8] bg-white px-4 text-[15px] text-[#0f4b4d] outline-none transition focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3] ${className}`}
+  />
+)
 
-    const handleCustomDropDown = (value) =>{
-        setCategory(value);
-        setShowDropdown(false);
+const SectionCard = ({ title, children, className = '' }) => (
+  <section className={`rounded-[18px] border border-[#edf0f3] bg-white p-4 shadow-none ${className}`}>
+    <h2 className='text-[22px] font-semibold tracking-tight text-slate-900'>{title}</h2>
+    <div className='mt-4'>{children}</div>
+  </section>
+)
 
-        setSendProduct(prev => ({
-            ...prev,
-            category: value
-        }));
-    }
-
-    const handleAllInputs = (e) =>{
-        const {name, value} = e.target;
-        setSendProduct(prev => ({
-            ...prev,
-            [name]:value
-        }));
-        console.log(name,value)
-    }
+const ActionButton = ({ children, variant = 'ghost', className = '', ...props }) => {
+  const styles =
+    variant === 'primary'
+      ? 'border-green-500 bg-green-500 text-white hover:bg-green-600'
+      : variant === 'soft'
+        ? 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
 
   return (
-    <div className='w-full h-full flex flex-col gap-2 mt-5 relative'>
-        {
-            popup &&
-            <div className='popup w-full h-full flex justify-center bg-[#0000003f] items-center absolute top-0 right-0'>
-                <div className='w-2/5 flex flex-col gap-6  bg-white shadow-lg p-5 rounded-2xl'>
-                    <div className='w-full flex justify-between items-center'>
-                        <h1 className='text-lg font-bold'>Add Product</h1>
-                        <i onClick={setPopup} className="fa-regular text-2xl cursor-pointer duration-200 hover:bg-gray-200 p-2 rounded-full fa-circle-xmark"></i>
-                    </div>
-                    <div className='w-full flex gap-3 h-full'>
-                        <CustomInput
-                        type={"adminDashboardInput"}
-                            width={"w-1/2"}
-                            height={"h-10"}
-                            title={"Name"}
-                            border={"border-2"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Product Name"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.name}
+    <button
+      type='button'
+      {...props}
+      className={`inline-flex h-10 items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition ${styles} ${className}`}
+    >
+      {children}
+    </button>
+  )
+}
+
+const ChipButton = ({ active, children, ...props }) => (
+  <button
+    type='button'
+    {...props}
+    className={`rounded-full border px-4 py-2 text-sm font-medium transition ${active ? 'border-[#53b26f] bg-[#ecf8f0] text-[#1f7a46]' : 'border-[#dbe2e8] bg-white text-[#0f4b4d] hover:bg-slate-50'}`}
+  >
+    {children}
+  </button>
+)
+
+const ProductDisplay = () => {
+  const [isCreateMode, setIsCreateMode] = useState(false)
+  const [draft, setDraft] = useState(initialDraft)
+  const [thumbnailPreview, setThumbnailPreview] = useState('')
+  const [subImagePreviews, setSubImagePreviews] = useState([])
+  const [publishState, setPublishState] = useState({ loading: false, error: '', success: '' })
+
+  const categoryOptions = useMemo(
+    () => [
+      'Electronics',
+      'Smart Gadgets',
+      'Mobile Phones',
+      'Laptops',
+      'Tablets',
+      'Accessories',
+      'Fashion',
+      'Clothing',
+      'Socks & Gloves',
+      'Shoes',
+      'Bags & Wallets',
+      'Beauty & Personal Care',
+      'Health & Wellness',
+      'Home & Kitchen',
+      'Furniture',
+      'Appliances',
+      'Sports',
+      'Outdoor & Travel',
+      'Toys & Games',
+      'Books',
+      'Groceries',
+      'Automotive',
+      'Jewelry & Watches',
+      'Baby Products',
+      'Pet Supplies',
+      'Stationery',
+    ],
+    [],
+  )
+
+  const tagOptions = useMemo(
+    () => ['New Arrival', 'Best Seller', 'Trending', 'Limited Offer'],
+    [],
+  )
+
+  const handleChange = (event) => {
+    const { name, value, type, checked, files } = event.target
+
+    if (type === 'checkbox') {
+      setDraft((current) => ({ ...current, [name]: checked }))
+      return
+    }
+
+    if (type === 'file') {
+      const selectedFiles = Array.from(files || [])
+      if (name === 'thumbnailFile') {
+        const file = selectedFiles[0]
+        if (file) {
+          setDraft((current) => ({ ...current, thumbnailFile: file }))
+          setThumbnailPreview(URL.createObjectURL(file))
+        }
+        return
+      }
+
+      if (name === 'subImageFiles' && selectedFiles.length > 0) {
+        setDraft((current) => ({
+          ...current,
+          subImageFiles: [...(current.subImageFiles || []), ...selectedFiles],
+        }))
+        setSubImagePreviews((current) => [...current, ...selectedFiles.map((file) => URL.createObjectURL(file))])
+      }
+      return
+    }
+
+    setDraft((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleOpenCreate = () => setIsCreateMode(true)
+  const handleCloseCreate = () => setIsCreateMode(false)
+
+  const handleCategoryChange = (event) => {
+    const category = event.target.value
+    const sizeType = sizeAwareCategories.get(category) || ''
+
+    setDraft((current) => ({
+      ...current,
+      category,
+      sizeType,
+      sizes: [],
+    }))
+  }
+
+  const toggleSize = (size) => {
+    setDraft((current) => {
+      const sizes = current.sizes || []
+      const nextSizes = sizes.includes(size) ? sizes.filter((item) => item !== size) : [...sizes, size]
+
+      return { ...current, sizes: nextSizes }
+    })
+  }
+
+  const removeSubImage = (removeIndex) => {
+    setDraft((current) => ({
+      ...current,
+      subImageFiles: (current.subImageFiles || []).filter((_, index) => index !== removeIndex),
+    }))
+    setSubImagePreviews((current) => current.filter((_, index) => index !== removeIndex))
+  }
+
+  const handlePublish = async () => {
+    setPublishState({ loading: true, error: '', success: '' })
+
+    try {
+      if (!draft.thumbnailFile) {
+        throw new Error('Please choose a thumbnail image')
+      }
+
+      const token = localStorage.getItem('token')
+      if (!token) {
+        throw new Error('Please sign in again before creating a product')
+      }
+
+      const formData = new FormData()
+      formData.append('name', draft.name)
+      formData.append('brand', draft.brand)
+      formData.append('category', draft.category)
+      formData.append('description', draft.description)
+      formData.append('price', Number.parseFloat(String(draft.price).replace(/[^0-9.]/g, '')) || 0)
+      formData.append('countInStock', draft.unlimited ? 0 : Number.parseInt(draft.stockQuantity, 10) || 0)
+      formData.append('rating', 0)
+      formData.append('numReviews', 0)
+      formData.append('discountedPrice', Number.parseFloat(String(draft.discountedPrice).replace(/[^0-9.]/g, '')) || 0)
+      formData.append('taxIncluded', draft.taxIncluded)
+      formData.append('startDate', draft.startDate)
+      formData.append('endDate', draft.endDate)
+      formData.append('stockStatus', draft.stockStatus)
+      formData.append('unlimited', String(draft.unlimited))
+      formData.append('featured', String(draft.featured))
+      formData.append('sizeType', draft.sizeType)
+      formData.append('sizes', JSON.stringify(draft.sizes || []))
+      formData.append('productType', draft.productTag)
+      formData.append('images', draft.thumbnailFile)
+      ;(draft.subImageFiles || []).forEach((file) => {
+        formData.append('images', file)
+      })
+
+      const response = await axios.post('http://localhost:5000/api/products', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      setPublishState({ loading: false, error: '', success: `Product created: ${response.data?.name || 'successfully'}` })
+      setIsCreateMode(false)
+    } catch (error) {
+      setPublishState({
+        loading: false,
+        error: error.response?.data?.message || error.message || 'Failed to create product',
+        success: '',
+      })
+    }
+  }
+
+  if (isCreateMode) {
+    return (
+      <div className='min-h-[calc(100vh-2rem)] w-full bg-[#eef0ed] p-4 text-slate-900'>
+        <div className='mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1260px] flex-col overflow-hidden rounded-[18px] bg-white shadow-[0_0_0_1px_rgba(15,23,42,0.04)]'>
+          <div className='flex items-center justify-between border-b border-slate-100 px-6 py-5'>
+            <div>
+              <p className='text-sm text-slate-500'>Add Product</p>
+              <h1 className='mt-1 text-xl font-semibold text-slate-900'>Add New Product</h1>
+            </div>
+
+            <div className='flex items-center gap-3'>
+              <label className='flex h-10 items-center rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-400 shadow-none'>
+                <input
+                  type='text'
+                  placeholder='Search product for add'
+                  className='w-44 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400'
+                />
+                <i className='fa-solid fa-magnifying-glass ml-4 text-slate-500' aria-hidden='true' />
+              </label>
+
+              <ActionButton variant='primary' onClick={handlePublish}>
+                <i className='fa-solid fa-bag-shopping' aria-hidden='true' />
+                Publish Product
+              </ActionButton>
+
+              <ActionButton onClick={handleCloseCreate}>
+                <i className='fa-regular fa-floppy-disk' aria-hidden='true' />
+                Save to draft
+              </ActionButton>
+
+              <button
+                type='button'
+                className='inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50'
+                aria-label='More actions'
+              >
+                <i className='fa-solid fa-plus' aria-hidden='true' />
+              </button>
+            </div>
+          </div>
+
+          <div className='flex-1 overflow-auto px-5 py-5'>
+            <div className='grid gap-4 xl:grid-cols-[1.08fr_0.92fr]'>
+              <div className='space-y-4'>
+                <SectionCard title='Basic Details'>
+                  <div className='space-y-5'>
+                    <FieldShell title='Product Name'>
+                      <BaseInput name='name' value={draft.name} onChange={handleChange} placeholder='Enter product name' />
+                    </FieldShell>
+                    <FieldShell title='Product Description'>
+                      <textarea
+                        name='description'
+                        value={draft.description}
+                        onChange={handleChange}
+                        placeholder='Write the product story and key details here.'
+                        className='min-h-[160px] w-full rounded-[12px] border border-[#dbe2e8] bg-[#fbfcfd] px-4 py-3.5 text-[15px] leading-6 text-[#0f4b4d] outline-none transition placeholder:text-slate-400 focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3]'
+                      />
+                    </FieldShell>
+                  </div>
+                </SectionCard>
+
+                <SectionCard title='Pricing'>
+                  <div className='space-y-4'>
+                    <FieldShell title='Product Price'>
+                      <div className='flex h-12 items-center overflow-hidden rounded-[12px] border border-[#dbe2e8] bg-white'>
+                        <BaseInput
+                          name='price'
+                          value={draft.price}
+                          onChange={handleChange}
+                          placeholder='$0.00'
+                          className='h-full rounded-none border-0 px-4 focus:ring-0'
                         />
-                        <CustomInput
-                        type={"adminDashboardInput"}
-                            width={"w-1/2"}
-                            height={"h-10"}
-                            title={"Brand"}
-                            border={"border-2"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Brand Name"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.brand}
-                        />
-                    </div>
-                    <div className='w-full flex gap-3 h-full'>
-                        <CustomInput
-                        type={"adminDashboardInput"}
-                        fieldType={"text"}
-                            width={"w-1/2"}
-                            height={"h-10"}
-                            title={"Product"}
-                            border={"border-2"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Product Type"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.productType}
-                        />
-                        <div className='w-1/2'>
-                            <CustomInput
-                            type={"adminDashboardInput"}
-                                width={"w-full"}
-                                height={"h-10"}
-                                title={"Category"}
-                                border={"border-2"}
-                                borderColor={"border-gray-400"}
-                                placeholder={"Category Name"}
-                                onchange={handleCategoryChange}
-                                value={category}
-                            />
-                            <CustomDropDown category={category} visibility={showDropdown} dropdownEvent={handleCustomDropDown} />
+                        <div className='flex h-full items-center gap-2 border-l border-[#dbe2e8] px-3 text-sm font-medium text-[#0f4b4d]'>
+                          <span>USD</span>
+                          <i className='fa-solid fa-caret-down text-[11px] text-slate-500' aria-hidden='true' />
                         </div>
+                      </div>
+                    </FieldShell>
 
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      <FieldShell title='Discounted Price (Optional)'>
+                        <BaseInput name='discountedPrice' value={draft.discountedPrice} onChange={handleChange} placeholder='$0.00' />
+                      </FieldShell>
+                      <FieldShell title='Tax Included'>
+                        <div className='flex h-12 items-center gap-5 rounded-[12px] border border-[#dbe2e8] bg-white px-3'>
+                          <label className='flex items-center gap-2 text-[14px] text-[#0f4b4d]'>
+                            <input type='radio' name='taxIncluded' value='yes' checked={draft.taxIncluded === 'yes'} onChange={handleChange} className='accent-orange-500' />
+                            Yes
+                          </label>
+                          <label className='flex items-center gap-2 text-[14px] text-[#0f4b4d]'>
+                            <input type='radio' name='taxIncluded' value='no' checked={draft.taxIncluded === 'no'} onChange={handleChange} className='accent-orange-500' />
+                            No
+                          </label>
+                        </div>
+                      </FieldShell>
                     </div>
-                    <div className='w-full'>
-                        <CustomInput
-                        type={"adminDashboardImageUpload"}
-                        fieldType={"file"}
-                            width={"w-full"}
-                            height={"h-40"}
-                            title={"Image"}
-                            border={"border-2"}
-                            bgcolor={"bg-green-100"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Product Name"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.image}
-                        />
-                    </div>
-                    <div className='w-full flex gap-3 h-full'>
-                        <CustomInput
-                        type={"adminDashboardInput"}
-                        fieldType={"Number"}
-                            width={"w-1/2"}
-                            height={"h-10"}
-                            title={"Stock"}
-                            border={"border-2"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Stock Count"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.countInStock}
-                        />
-                        <CustomInput
-                            type={"adminDashboardInput"}
-                            fieldType={"Number"}
-                            width={"w-1/2"}
-                            height={"h-10"}
-                            title={"Price"}
-                            border={"border-2"}
-                            borderColor={"border-gray-400"}
-                            placeholder={"Price Tag"}
-                            onchange={handleAllInputs}
-                            value={sendProduct.category}
-                        />
-                    </div>
-                    <div className='w-full flex-col flex gap-3 h-full'>
-                        <textarea className='w-full indent-2 h-25 border border-dashed outline-0 focus:ring-3 ring-blue-300 rounded-xl' placeholder='Description' name="" id=""></textarea>
-                    </div>
-                    <CustomButton clickEvent={addProduct} type={"add"} title={"Submit"}/>
-                </div>
-            </div>
-        }
 
-        <div className='w-full flex items-center'>
-            <h1 className='text-xl font-medium'>Discover</h1>
-            <div className='w-full flex justify-end gap-3'>
-                <CustomButton clickEvent={setPopup} type={"add"}  bgcolor={"green-600"} title={"Add product"} height={4}/>
-                <CustomButton type={"add"} textcolor={"black"} bgcolor={"white"} border={"border"} height={4} borderColor={"gray-300"} title={"More Action"}/>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      <FieldShell title='Expiration'>
+                        <BaseInput name='startDate' value={draft.startDate} onChange={handleChange} type='date' placeholder='Start' />
+                      </FieldShell>
+                      <FieldShell title=''>
+                        <BaseInput name='endDate' value={draft.endDate} onChange={handleChange} type='date' placeholder='End' className='mt-8' />
+                      </FieldShell>
+                    </div>
+                  </div>
+                </SectionCard>
+
+                <SectionCard title='Inventory'>
+                  <div className='space-y-4'>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                      <FieldShell title='Stock Quantity'>
+                        <BaseInput name='stockQuantity' value={draft.stockQuantity} onChange={handleChange} placeholder='Unlimited' />
+                      </FieldShell>
+                      <FieldShell title='Stock Status'>
+                        <BaseSelect name='stockStatus' value={draft.stockStatus} onChange={handleChange}>
+                          <option>In Stock</option>
+                          <option>Low Stock</option>
+                          <option>Out of Stock</option>
+                        </BaseSelect>
+                      </FieldShell>
+                    </div>
+
+                    <label className='flex items-center gap-3 text-[14px] text-[#0f4b4d]'>
+                      <input name='unlimited' checked={draft.unlimited} onChange={handleChange} type='checkbox' className='h-5 w-5 rounded border-slate-300 text-green-500 focus:ring-green-500' />
+                      Unlimited
+                    </label>
+
+                    <label className='flex items-center gap-3 text-[14px] text-[#0f4b4d]'>
+                      <input name='featured' checked={draft.featured} onChange={handleChange} type='checkbox' className='h-5 w-5 rounded border-slate-300 text-green-500 focus:ring-green-500' />
+                      Highlight this product in a featured section.
+                    </label>
+
+                    <div className='flex items-center justify-end gap-3 pt-2'>
+                      <ActionButton onClick={handleCloseCreate}>Save to draft</ActionButton>
+                      <ActionButton variant='primary' onClick={handlePublish}>Publish Product</ActionButton>
+                    </div>
+                  </div>
+                </SectionCard>
+              </div>
+
+              <div className='space-y-6'>
+                <SectionCard title='Upload Product Image'>
+                  <div className='space-y-4'>
+                    <div className='rounded-[18px] border border-[#dbe2e8] bg-white p-4'>
+                      <h3 className='text-[15px] font-semibold tracking-tight text-[#0f4b4d]'>Product Image</h3>
+
+                      <div className='mt-3 flex min-h-[280px] items-center justify-center overflow-hidden rounded-[14px] border border-[#dbe2e8] bg-white p-3'>
+                        {thumbnailPreview ? (
+                          <img src={thumbnailPreview} alt='Selected thumbnail preview' className='max-h-[240px] w-auto object-contain' />
+                        ) : (
+                          <div className='flex flex-col items-center gap-2 text-center text-slate-500'>
+                            <i className='fa-regular fa-image text-4xl' aria-hidden='true' />
+                            <p className='text-sm font-medium text-slate-700'>Add thumbnail image</p>
+                            <p className='text-xs text-slate-500'>This will be the main product image</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className='mt-4 flex items-center justify-between gap-3'>
+                        <label className='inline-flex cursor-pointer items-center gap-2 rounded-[12px] border border-[#dbe2e8] bg-white px-4 py-2.5 text-[14px] font-medium text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50'>
+                          <i className='fa-solid fa-image text-slate-500' aria-hidden='true' />
+                          Browse
+                          <input name='thumbnailFile' type='file' accept='image/*' onChange={handleChange} className='hidden' />
+                        </label>
+
+                        <button
+                          type='button'
+                          onClick={() => document.querySelector('input[name="thumbnailFile"]')?.click()}
+                          className='inline-flex items-center gap-2 rounded-[12px] border border-[#dbe2e8] bg-white px-4 py-2.5 text-[14px] font-medium text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50'
+                        >
+                          <i className='fa-solid fa-rotate-right' aria-hidden='true' />
+                          Replace
+                        </button>
+                      </div>
+
+                      <div className='mt-4 flex flex-wrap gap-3'>
+                        {subImagePreviews.map((preview, index) => (
+                          <div key={`${preview}-${index}`} className='relative flex h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-[12px] border border-[#dbe2e8] bg-white p-2 shadow-[0_1px_2px_rgba(15,23,42,0.04)]'>
+                            <button
+                              type='button'
+                              onClick={() => removeSubImage(index)}
+                              className='absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50'
+                              aria-label={`Remove sub image ${index + 1}`}
+                            >
+                              <i className='fa-solid fa-xmark text-[11px]' aria-hidden='true' />
+                            </button>
+                            <img src={preview} alt={`Sub image preview ${index + 1}`} className='h-full w-full object-contain' />
+                          </div>
+                        ))}
+
+                        <label className='flex h-[120px] w-[240px] cursor-pointer flex-col items-center justify-center rounded-[12px] border-2 border-dashed border-[#bfcad8] bg-white text-center text-[#53b26f] transition hover:bg-slate-50'>
+                          <i className='fa-solid fa-circle-plus text-[28px]' aria-hidden='true' />
+                          <span className='mt-2 text-[15px] font-medium'>Add Image</span>
+                          <input name='subImageFiles' type='file' accept='image/*' multiple onChange={handleChange} className='hidden' />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </SectionCard>
+
+                <SectionCard title='Categories'>
+                  <div className='space-y-4'>
+                    <FieldShell title='Brand'>
+                      <BaseInput name='brand' value={draft.brand} onChange={handleChange} placeholder='Apple, Nike, Samsung' />
+                    </FieldShell>
+
+                    <FieldShell title='Product Categories'>
+                      <BaseSelect name='category' value={draft.category} onChange={handleCategoryChange}>
+                        <option value=''>Select product category</option>
+                        {categoryOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </BaseSelect>
+                    </FieldShell>
+
+                    <FieldShell title='Product Tag'>
+                      <BaseSelect name='productTag' value={draft.productTag} onChange={handleChange}>
+                        <option value=''>Select tag</option>
+                        {tagOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </BaseSelect>
+                    </FieldShell>
+
+                    {draft.sizeType ? (
+                      <FieldShell title={draft.sizeType === 'footwear' ? 'Shoe Sizes' : 'Product Sizes'}>
+                        <div className='flex flex-wrap gap-3'>
+                          {(draft.sizeType === 'footwear' ? footwearSizes : apparelSizes).map((size) => (
+                            <ChipButton key={size} active={(draft.sizes || []).includes(size)} onClick={() => toggleSize(size)}>
+                              {size}
+                            </ChipButton>
+                          ))}
+                        </div>
+                      </FieldShell>
+                    ) : null}
+                  </div>
+                </SectionCard>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='mt-5 flex h-full w-full flex-col gap-4'>
+      {publishState.error ? <div className='rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700'>{publishState.error}</div> : null}
+      {publishState.success ? <div className='rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700'>{publishState.success}</div> : null}
+      <div className='flex w-full items-center justify-between gap-4'>
+        <div>
+          <h1 className='text-xl font-medium text-slate-900'>Discover</h1>
+          <p className='mt-1 text-sm text-slate-500'>Browse categories and manage the product catalog.</p>
         </div>
 
-        <div className='w-full'>
-            <CategoryScroller />
+        <div className='flex items-center gap-3'>
+          <CustomButton clickEvent={handleOpenCreate} type='add' bgcolor='orange-500' title='Add product' height={4} />
+          <CustomButton type='add' textcolor='black' bgcolor='white' border='border' height={4} borderColor='gray-300' title='More Action' />
         </div>
+      </div>
 
-        
-        <table className='w-full text-center'>
-            <thead>
-                <tr className=' border-gray-500 text-white'>
-                    <th className='px-4 py-4 bg-gray-800'>ProductId</th>
-                    <th className='px-4 py-4 bg-gray-800'>Name</th>
-                    <th className='px-4 py- bg-gray-800'>Brand</th>
-                    <th className='px-4 py-4 bg-gray-800'>Category</th>
-                    <th className='px-4 py-4 bg-gray-800'>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    products.map((product,index) =>  <tr className='border-b' key={index}>
-                <td className="px-4 py-2">{product._id}</td>
-                <td className="px-4 py-2 flex  items-center gap-4"><img className='w-6' src={product.image} alt="" />{product.name}</td>
-                <td className="px-4 py-2">{product.brand}</td>
-                <td className="px-4 py-2">{product.category}</td>
-                <td className="px-4 py-2">{product.price}</td>
-                <td>
-                    <div className='relative cursor-pointer'>
-                        <i class="fa-solid fa-grip-lines"></i>
-                        <ul className='absolute top-[-30px] shadow-2xl rounded-[8px] overflow-hidden right-10 tab invisible cursor-pointer '>
-                            <li className='p-2 bg-white hover:bg-red-400 hover:text-white' onClick={() => removeProduct(product._id)}>Remove</li>
-                        </ul>
-                    </div>
-                </td>
-                </tr>)
-                }
-            </tbody>
-        </table>
-        {
-            products.length === 0 && <div className='w-full flex items-center justify-center h-10 bg-white'>
-                <h1>No products found</h1>
-            </div>
-        }
+      <div className='w-full'>
+        <CategoryScroller />
+      </div>
+
+      <div className='w-full'>
+        <ProductTableSection />
+      </div>
     </div>
   )
 }

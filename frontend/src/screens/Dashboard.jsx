@@ -40,7 +40,9 @@ const Dashboard = () => {
         <ul className='w-full flex flex-col gap-4'>
             <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2'><i className="fa-solid fa-bell"></i><p>Notification</p></li>
             <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2'><i className="fa-solid fa-circle-info"></i><p>Help</p></li>
-            <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2'><i class="fa-solid fa-gear"></i><p>Settings</p></li>
+            <NavLink to='/admin/settings'>
+              <li className='flex items-center gap-3 cursor-pointer pl-7 pt-2 pb-2'><i className="fa-solid fa-gear"></i><p>Settings</p></li>
+            </NavLink>
         </ul>
 
         <div className='flex gap-3 text-[20px] w-full pl-7 cursor-pointer' onClick={logout}>
