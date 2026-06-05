@@ -1,11 +1,8 @@
 import React from 'react'
-import { BarChart } from '@mui/x-charts'
 import { DashboardCard } from '../reusableComponents/DashboardCard'
 import { CustomButton } from '../reusableComponents/CustomButton'
 import GenericTable from '../reusableComponents/GenericTable'
 import ReportGraphCard from '../reusableComponents/ReportGraphCard'
-
-const usersPerMinute = [10, 14, 18, 26, 22, 20, 24, 12, 8, 17, 15, 11, 14, 19, 16, 18, 13, 23, 9, 7]
 
 const countryData = [
   { name: 'US', value: '30k', progress: 76, delta: '+25.8%', deltaClass: 'text-green-500' },
@@ -20,6 +17,16 @@ const topProducts = [
   { name: 'Assorted Cross Bag', category: 'Accessories', price: '$80.00', tone: 'bg-amber-700' },
 ]
 
+const weeklyBars = [
+  { label: 'M', value: 10 },
+  { label: 'T', value: 14 },
+  { label: 'W', value: 18 },
+  { label: 'T', value: 26 },
+  { label: 'F', value: 22 },
+  { label: 'S', value: 20 },
+  { label: 'S', value: 24 },
+]
+
 const UsersCard = () => (
   <div className='flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-none min-w-0'>
     <div className='flex items-start justify-between'>
@@ -32,32 +39,24 @@ const UsersCard = () => (
     </div>
 
     <div className='mt-4 w-full min-w-0 rounded-2xl bg-orange-50 px-2 py-2'>
-      <BarChart
-        xAxis={[
-          {
-            scaleType: 'band',
-            data: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-          },
-        ]}
-        series={[
-          {
-            data: usersPerMinute,
-            color: '#f97316',
-          },
-        ]}
-        height={150}
-        margin={{ top: 12, right: 8, bottom: 20, left: 8 }}
-        sx={{
-          width: '100%',
-          '& .MuiChartsAxis-line': {
-            stroke: '#ffedd5',
-          },
-          '& .MuiChartsAxis-tickLabel': {
-            fill: '#94a3b8',
-            fontSize: 11,
-          },
-        }}
-      />
+      <div className='flex h-[150px] items-end gap-3 rounded-xl bg-orange-50 px-3 py-3'>
+        {weeklyBars.map((bar) => {
+          const height = Math.max((bar.value / 30) * 100, 18)
+
+          return (
+            <div key={bar.label} className='flex h-full flex-1 flex-col items-center justify-end gap-2'>
+              <div className='flex h-full w-full items-end justify-center'>
+                <div
+                  className='w-full max-w-[18px] rounded-t-full bg-orange-500'
+                  style={{ height: `${height}%` }}
+                  aria-label={`${bar.label} users`}
+                />
+              </div>
+              <span className='text-xs font-medium text-slate-500'>{bar.label}</span>
+            </div>
+          )
+        })}
+      </div>
     </div>
 
     <div className='mt-5 border-t border-slate-200 pt-4'>
