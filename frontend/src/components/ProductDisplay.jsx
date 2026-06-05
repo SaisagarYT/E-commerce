@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import axios from 'axios'
 import { CustomButton } from '../reusableComponents/CustomButton'
+import { CustomInput } from '../reusableComponents/CustomInput'
 import CategoryScroller from './CategoryScroller'
 import ProductTableSection from './ProductTableSection'
 
@@ -40,45 +41,12 @@ const FieldShell = ({ title, children, className = '' }) => (
   </div>
 )
 
-const BaseInput = ({ className = '', ...props }) => (
-  <input
-    {...props}
-    className={`h-12 w-full rounded-[12px] border border-[#dbe2e8] bg-white px-4 text-[15px] text-[#0f4b4d] outline-none transition placeholder:text-slate-400 focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3] ${className}`}
-  />
-)
-
-const BaseSelect = ({ className = '', ...props }) => (
-  <select
-    {...props}
-    className={`h-12 w-full rounded-[12px] border border-[#dbe2e8] bg-white px-4 text-[15px] text-[#0f4b4d] outline-none transition focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3] ${className}`}
-  />
-)
-
 const SectionCard = ({ title, children, className = '' }) => (
   <section className={`rounded-[18px] border border-[#edf0f3] bg-white p-4 shadow-none ${className}`}>
     <h2 className='text-[22px] font-semibold tracking-tight text-slate-900'>{title}</h2>
     <div className='mt-4'>{children}</div>
   </section>
 )
-
-const ActionButton = ({ children, variant = 'ghost', className = '', ...props }) => {
-  const styles =
-    variant === 'primary'
-      ? 'border-green-500 bg-green-500 text-white hover:bg-green-600'
-      : variant === 'soft'
-        ? 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-
-  return (
-    <button
-      type='button'
-      {...props}
-      className={`inline-flex h-10 items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium transition ${styles} ${className}`}
-    >
-      {children}
-    </button>
-  )
-}
 
 const ChipButton = ({ active, children, ...props }) => (
   <button
@@ -264,32 +232,29 @@ const ProductDisplay = () => {
             </div>
 
             <div className='flex items-center gap-3'>
-              <label className='flex h-10 items-center rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-400 shadow-none'>
-                <input
-                  type='text'
-                  placeholder='Search product for add'
-                  className='w-44 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400'
-                />
-                <i className='fa-solid fa-magnifying-glass ml-4 text-slate-500' aria-hidden='true' />
-              </label>
+              <CustomButton
+                title='Save to draft'
+                bgcolor='white'
+                textcolor='black'
+                border='border'
+                borderColor='gray-300'
+                height={2}
+                width={4}
+                clickEvent={handleCloseCreate}
+                icon={<i className='fa-regular fa-floppy-disk' aria-hidden='true' />}
+              />
 
-              <ActionButton variant='primary' onClick={handlePublish}>
-                <i className='fa-solid fa-bag-shopping' aria-hidden='true' />
-                Publish Product
-              </ActionButton>
-
-              <ActionButton onClick={handleCloseCreate}>
-                <i className='fa-regular fa-floppy-disk' aria-hidden='true' />
-                Save to draft
-              </ActionButton>
-
-              <button
-                type='button'
-                className='inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50'
-                aria-label='More actions'
-              >
-                <i className='fa-solid fa-plus' aria-hidden='true' />
-              </button>
+              <CustomButton
+                title='Publish Product'
+                bgcolor='green-500'
+                textcolor='white'
+                border='border'
+                borderColor='green-500'
+                height={2}
+                width={4}
+                clickEvent={handlePublish}
+                icon={<i className='fa-solid fa-bag-shopping' aria-hidden='true' />}
+              />
             </div>
           </div>
 
@@ -298,18 +263,16 @@ const ProductDisplay = () => {
               <div className='space-y-4'>
                 <SectionCard title='Basic Details'>
                   <div className='space-y-5'>
-                    <FieldShell title='Product Name'>
-                      <BaseInput name='name' value={draft.name} onChange={handleChange} placeholder='Enter product name' />
-                    </FieldShell>
-                    <FieldShell title='Product Description'>
-                      <textarea
-                        name='description'
-                        value={draft.description}
-                        onChange={handleChange}
-                        placeholder='Write the product story and key details here.'
-                        className='min-h-[160px] w-full rounded-[12px] border border-[#dbe2e8] bg-[#fbfcfd] px-4 py-3.5 text-[15px] leading-6 text-[#0f4b4d] outline-none transition placeholder:text-slate-400 focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3]'
-                      />
-                    </FieldShell>
+                    <CustomInput label='Product Name' name='name' value={draft.name} onChange={handleChange} placeholder='Enter product name' />
+                    <CustomInput
+                      label='Product Description'
+                      as='textarea'
+                      name='description'
+                      value={draft.description}
+                      onChange={handleChange}
+                      placeholder='Write the product story and key details here.'
+                      inputClassName='min-h-[160px] px-4 py-3.5 leading-6 bg-[#fbfcfd]'
+                    />
                   </div>
                 </SectionCard>
 
@@ -317,12 +280,12 @@ const ProductDisplay = () => {
                   <div className='space-y-4'>
                     <FieldShell title='Product Price'>
                       <div className='flex h-12 items-center overflow-hidden rounded-[12px] border border-[#dbe2e8] bg-white'>
-                        <BaseInput
+                        <CustomInput
                           name='price'
                           value={draft.price}
                           onChange={handleChange}
                           placeholder='$0.00'
-                          className='h-full rounded-none border-0 px-4 focus:ring-0'
+                          inputClassName='h-full rounded-none border-0 px-4 focus:ring-0'
                         />
                         <div className='flex h-full items-center gap-2 border-l border-[#dbe2e8] px-3 text-sm font-medium text-[#0f4b4d]'>
                           <span>USD</span>
@@ -332,9 +295,7 @@ const ProductDisplay = () => {
                     </FieldShell>
 
                     <div className='grid gap-4 md:grid-cols-2'>
-                      <FieldShell title='Discounted Price (Optional)'>
-                        <BaseInput name='discountedPrice' value={draft.discountedPrice} onChange={handleChange} placeholder='$0.00' />
-                      </FieldShell>
+                      <CustomInput label='Discounted Price (Optional)' name='discountedPrice' value={draft.discountedPrice} onChange={handleChange} placeholder='$0.00' />
                       <FieldShell title='Tax Included'>
                         <div className='flex h-12 items-center gap-5 rounded-[12px] border border-[#dbe2e8] bg-white px-3'>
                           <label className='flex items-center gap-2 text-[14px] text-[#0f4b4d]'>
@@ -350,12 +311,8 @@ const ProductDisplay = () => {
                     </div>
 
                     <div className='grid gap-4 md:grid-cols-2'>
-                      <FieldShell title='Expiration'>
-                        <BaseInput name='startDate' value={draft.startDate} onChange={handleChange} type='date' placeholder='Start' />
-                      </FieldShell>
-                      <FieldShell title=''>
-                        <BaseInput name='endDate' value={draft.endDate} onChange={handleChange} type='date' placeholder='End' className='mt-8' />
-                      </FieldShell>
+                      <CustomInput label='Expiration' name='startDate' value={draft.startDate} onChange={handleChange} type='date' placeholder='Start' />
+                      <CustomInput label='' name='endDate' value={draft.endDate} onChange={handleChange} type='date' placeholder='End' inputClassName='mt-8' />
                     </div>
                   </div>
                 </SectionCard>
@@ -363,16 +320,13 @@ const ProductDisplay = () => {
                 <SectionCard title='Inventory'>
                   <div className='space-y-4'>
                     <div className='grid gap-4 md:grid-cols-2'>
-                      <FieldShell title='Stock Quantity'>
-                        <BaseInput name='stockQuantity' value={draft.stockQuantity} onChange={handleChange} placeholder='Unlimited' />
-                      </FieldShell>
-                      <FieldShell title='Stock Status'>
-                        <BaseSelect name='stockStatus' value={draft.stockStatus} onChange={handleChange}>
-                          <option>In Stock</option>
-                          <option>Low Stock</option>
-                          <option>Out of Stock</option>
-                        </BaseSelect>
-                      </FieldShell>
+                      <CustomInput label='Stock Quantity' name='stockQuantity' value={draft.stockQuantity} onChange={handleChange} placeholder='Unlimited' />
+                      <CustomInput label='Stock Status' as='select' name='stockStatus' value={draft.stockStatus} onChange={handleChange}>
+                        <option value=''>Select stock status</option>
+                        <option>In Stock</option>
+                        <option>Low Stock</option>
+                        <option>Out of Stock</option>
+                      </CustomInput>
                     </div>
 
                     <label className='flex items-center gap-3 text-[14px] text-[#0f4b4d]'>
@@ -386,8 +340,28 @@ const ProductDisplay = () => {
                     </label>
 
                     <div className='flex items-center justify-end gap-3 pt-2'>
-                      <ActionButton onClick={handleCloseCreate}>Save to draft</ActionButton>
-                      <ActionButton variant='primary' onClick={handlePublish}>Publish Product</ActionButton>
+                      <CustomButton
+                        title='Save to draft'
+                        bgcolor='white'
+                        textcolor='black'
+                        border='border'
+                        borderColor='gray-300'
+                        height={2}
+                        width={4}
+                        clickEvent={handleCloseCreate}
+                        icon={<i className='fa-regular fa-floppy-disk' aria-hidden='true' />}
+                      />
+                      <CustomButton
+                        title='Publish Product'
+                        bgcolor='green-500'
+                        textcolor='white'
+                        border='border'
+                        borderColor='green-500'
+                        height={2}
+                        width={4}
+                        clickEvent={handlePublish}
+                        icon={<i className='fa-solid fa-bag-shopping' aria-hidden='true' />}
+                      />
                     </div>
                   </div>
                 </SectionCard>
@@ -412,20 +386,30 @@ const ProductDisplay = () => {
                       </div>
 
                       <div className='mt-4 flex items-center justify-between gap-3'>
-                        <label className='inline-flex cursor-pointer items-center gap-2 rounded-[12px] border border-[#dbe2e8] bg-white px-4 py-2.5 text-[14px] font-medium text-slate-500 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:bg-slate-50'>
-                          <i className='fa-solid fa-image text-slate-500' aria-hidden='true' />
-                          Browse
-                          <input name='thumbnailFile' type='file' accept='image/*' onChange={handleChange} className='hidden' />
-                        </label>
+                        <input id='thumbnail-file' name='thumbnailFile' type='file' accept='image/*' onChange={handleChange} className='hidden' />
+                        <CustomButton
+                          title='Browse'
+                          bgcolor='white'
+                          textcolor='black'
+                          border='border'
+                          borderColor='gray-300'
+                          height={2}
+                          width={4}
+                          clickEvent={() => document.getElementById('thumbnail-file')?.click()}
+                          icon={<i className='fa-solid fa-image' aria-hidden='true' />}
+                        />
 
-                        <button
-                          type='button'
-                          onClick={() => document.querySelector('input[name="thumbnailFile"]')?.click()}
-                          className='inline-flex items-center gap-2 rounded-[12px] border border-[#dbe2e8] bg-white px-4 py-2.5 text-[14px] font-medium text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:bg-slate-50'
-                        >
-                          <i className='fa-solid fa-rotate-right' aria-hidden='true' />
-                          Replace
-                        </button>
+                        <CustomButton
+                          title='Replace'
+                          bgcolor='white'
+                          textcolor='black'
+                          border='border'
+                          borderColor='gray-300'
+                          height={2}
+                          width={4}
+                          clickEvent={() => document.getElementById('thumbnail-file')?.click()}
+                          icon={<i className='fa-solid fa-rotate-right' aria-hidden='true' />}
+                        />
                       </div>
 
                       <div className='mt-4 flex flex-wrap gap-3'>
@@ -443,11 +427,18 @@ const ProductDisplay = () => {
                           </div>
                         ))}
 
-                        <label className='flex h-[120px] w-[240px] cursor-pointer flex-col items-center justify-center rounded-[12px] border-2 border-dashed border-[#bfcad8] bg-white text-center text-[#53b26f] transition hover:bg-slate-50'>
-                          <i className='fa-solid fa-circle-plus text-[28px]' aria-hidden='true' />
-                          <span className='mt-2 text-[15px] font-medium'>Add Image</span>
-                          <input name='subImageFiles' type='file' accept='image/*' multiple onChange={handleChange} className='hidden' />
-                        </label>
+                        <input id='sub-image-files' name='subImageFiles' type='file' accept='image/*' multiple onChange={handleChange} className='hidden' />
+                        <CustomButton
+                          title='Add Image'
+                          bgcolor='white'
+                          textcolor='green-600'
+                          border='border'
+                          borderColor='green-500'
+                          height={6}
+                          width={7}
+                          clickEvent={() => document.getElementById('sub-image-files')?.click()}
+                          icon={<i className='fa-solid fa-circle-plus' aria-hidden='true' />}
+                        />
                       </div>
                     </div>
                   </div>
@@ -455,31 +446,25 @@ const ProductDisplay = () => {
 
                 <SectionCard title='Categories'>
                   <div className='space-y-4'>
-                    <FieldShell title='Brand'>
-                      <BaseInput name='brand' value={draft.brand} onChange={handleChange} placeholder='Apple, Nike, Samsung' />
-                    </FieldShell>
+                    <CustomInput label='Brand' name='brand' value={draft.brand} onChange={handleChange} placeholder='Apple, Nike, Samsung' />
 
-                    <FieldShell title='Product Categories'>
-                      <BaseSelect name='category' value={draft.category} onChange={handleCategoryChange}>
+                    <CustomInput label='Product Categories' as='select' name='category' value={draft.category} onChange={handleCategoryChange}>
                         <option value=''>Select product category</option>
                         {categoryOptions.map((option) => (
                           <option key={option} value={option}>
                             {option}
                           </option>
                         ))}
-                      </BaseSelect>
-                    </FieldShell>
+                    </CustomInput>
 
-                    <FieldShell title='Product Tag'>
-                      <BaseSelect name='productTag' value={draft.productTag} onChange={handleChange}>
+                    <CustomInput label='Product Tag' as='select' name='productTag' value={draft.productTag} onChange={handleChange}>
                         <option value=''>Select tag</option>
                         {tagOptions.map((option) => (
                           <option key={option} value={option}>
                             {option}
                           </option>
                         ))}
-                      </BaseSelect>
-                    </FieldShell>
+                    </CustomInput>
 
                     {draft.sizeType ? (
                       <FieldShell title={draft.sizeType === 'footwear' ? 'Shoe Sizes' : 'Product Sizes'}>

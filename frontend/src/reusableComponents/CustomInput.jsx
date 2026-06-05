@@ -1,31 +1,62 @@
 import React from 'react'
 
-export const CustomInput = ({type,title, fieldType, onchange, placeholder, border, borderColor, bgcolor,width,height, value}) => {
-    const input1 = 
-        type == 'adminDashboardInput'? `${border} ${bgcolor} ${borderColor} ${width} ${height}`:``
-    const input2 = 
-        type == 'adminDashboardImageUpload' ? `w-full flex justify-center item-center ${bgcolor} ${borderColor} ${height} border border-dashed`:``
+export const CustomInput = ({
+  label,
+  as = 'input',
+  type = 'text',
+  value,
+  onChange,
+  placeholder,
+  name,
+  options = [],
+  children,
+  className = '',
+  inputClassName = '',
+  labelClassName = '',
+  ...props
+}) => {
+  const baseClassName = `w-full rounded-[12px] border border-[#dbe2e8] bg-white px-4 text-[15px] text-[#0f4b4d] outline-none transition placeholder:text-slate-400 focus:border-[#a8c6cf] focus:ring-4 focus:ring-[#dceff3] ${inputClassName}`
+
   return (
-    <div className={`${width} flex flex-col gap-2`}>
-      {type == 'adminDashboardImageUpload' ? (
-        <div className={`relative w-full ${height} ${bgcolor} ${borderColor} border border-dashed rounded-sm overflow-hidden`}>
-          <span className="absolute inset-0 flex items-center justify-center text-gray-600 font-medium pointer-events-none">
-            upload your image
-          </span>
-          <input
-            value={value}
-            onChange={() => onchange(title)}
-            placeholder={`${placeholder}`}
-            type={`${fieldType}`}
-            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-            name={value}
-          />
-        </div>
+    <div className={`space-y-2 ${className}`}>
+      {label ? <label className={`text-[15px] font-semibold tracking-tight text-[#0f4b4d] ${labelClassName}`}>{label}</label> : null}
+
+      {as === 'textarea' ? (
+        <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={baseClassName}
+          {...props}
+        >
+          {children}
+        </textarea>
+      ) : as === 'select' ? (
+        <select
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={baseClassName}
+          {...props}
+        >
+          {children}
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       ) : (
-        <>
-          <h1 className='font-medium text-md'>{title}</h1>
-          <input value={value} onChange={onchange} placeholder={`${placeholder}`} type={`${fieldType}`} className={`${input1} ${input2} w-full indent-2 focus:outline-0 focus:ring-4 rounded-sm focus:ring-blue-300 outline-0`} />
-        </>
+        <input
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={baseClassName}
+          {...props}
+        />
       )}
     </div>
   )
