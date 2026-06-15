@@ -20,6 +20,13 @@ tmp
 temp
 coverage
 *.local
+.env
+**/.env
+*/.env
+ecommerce-backend/.env
+
+**/node_modules
+ecommerce-backend/node_modules
 
 # Editor directories and files
 .vscode/*

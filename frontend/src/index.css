@@ -3,3 +3,33 @@
 *{
     scrollbar-width: none;
 }
+
+:root {
+  /* Brand */
+  --primary: #E56627;
+  --primary-hover: #CF561B;
+  --primary-light: #FFF1EA;
+
+  /* Secondary */
+  --navy: #0A2138;
+  --navy-light: #183553;
+
+  /* Accent */
+  --green: #41EA41;
+  --green-hover: #32D432;
+  --green-light: #E9FEE9;
+
+  /* Neutral */
+  --white: #FFFFFF;
+  --black: #000000;
+
+  /* UI */
+  --background: #FFFFFF;
+  --section-bg: #F8FAFC;
+  --border: #E5E7EB;
+
+  /* Typography */
+  --text-primary: #0A2138;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+}

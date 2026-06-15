@@ -86,17 +86,51 @@ const Buypage = () => {
             handleData();
         }
     }
-    if(data.length < 1){
-        return(
-            <div className='w-screen h-screen items-center flex justify-center flex-col'>
-                <Navbar/>
-                <div className='w-screen h-screen items-center flex justify-center flex-col'>
-                    <h1 className='pl-10 pr-10 pt-2 pb-4 bg-black text-white text-8xl font-extrabold rounded-tl-2xl rounded-br-2xl'>EMPTY</h1>
-                    <p className='mt-4 text-2xl'>Please don't Keep me empty....</p>
-                </div>
-            </div>
-        );
-    }
+    if (data.length < 1) {
+return ( <div className='w-screen min-h-screen bg-[#fafafa]'> <Navbar />
+
+  <div className='flex flex-col items-center justify-center h-[80vh] px-6'>
+
+    <div className='w-40 h-40 rounded-full bg-[#E56627]/10 flex items-center justify-center mb-8'>
+
+      <i className="fa-solid fa-cart-shopping text-7xl text-[#E56627]"></i>
+
+    </div>
+
+    <h1 className='text-5xl font-black text-[#0A2138] text-center'>
+      Your Cart Is Empty
+    </h1>
+
+    <p className='text-gray-500 text-lg mt-4 text-center max-w-lg'>
+      Looks like you haven't added anything to your cart yet.
+      Start exploring our products and find something you'll love.
+    </p>
+
+    <Link to='/shop' className='mt-8'>
+
+      <button
+        className='
+        px-8
+        py-4
+        bg-[#E56627]
+        text-white
+        rounded-full
+        font-bold
+        hover:bg-[#cf5a21]
+        transition-all
+        '
+      >
+        Continue Shopping
+      </button>
+
+    </Link>
+
+  </div>
+</div>
+
+);
+}
+
 
     let totalPrice = data.reduce((acc,item) => acc + (item.price * item.quantity), 0)
   return (

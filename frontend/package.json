@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@tailwindcss/oxide": "^4.1.8",
     "@tailwindcss/vite": "^4.1.8",
     "aos": "^2.3.4",
     "axios": "^1.16.1",
