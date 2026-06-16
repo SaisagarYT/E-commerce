@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
+import BACKEND_BASE_URL from '../../api/api';
 
 const tabs = [
   { key: 'all', label: 'All Users' },
@@ -77,7 +78,7 @@ const UserDisplay = () => {
   useEffect(() => {
     const userFetch = async () => {
       try {
-        const response = await Axios.get('http://localhost:5000/api/users', {
+        const response = await Axios.get(`${BACKEND_BASE_URL}/api/users`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

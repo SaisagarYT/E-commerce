@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import BACKEND_BASE_URL from '../../api/api';
 
 const OrderSummary = ({prev,next}) => {
   const [data,setData] = useState([]);
@@ -7,7 +8,7 @@ const OrderSummary = ({prev,next}) => {
   console.log(token)
   useEffect(() =>{
     const fetchCart = async() =>{
-      const response = await axios.get('http://localhost:5000/api/cart/get',{
+      const response = await axios.get(`${BACKEND_BASE_URL}/api/cart/get`,{
         headers:{
           Authorization:`Bearer ${token}`
         }

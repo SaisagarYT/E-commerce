@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import BACKEND_BASE_URL from '../../api/api'
 
 const RecentlyCreatedProducts = () => {
   const [products, setProducts] = useState([])
@@ -9,7 +10,7 @@ const RecentlyCreatedProducts = () => {
   useEffect(() => {
     const fetchRecentProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products?sort=latest&limit=8')
+        const response = await axios.get(`${BACKEND_BASE_URL}/api/products?sort=latest&limit=8`)
         setProducts(response.data)
       } catch (error) {
         console.log(error.message)

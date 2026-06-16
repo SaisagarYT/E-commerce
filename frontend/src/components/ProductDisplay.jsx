@@ -4,6 +4,7 @@ import { CustomButton } from '../reusableComponents/CustomButton'
 import { CustomInput } from '../reusableComponents/CustomInput'
 import CategoryScroller from './CategoryScroller'
 import ProductTableSection from './ProductTableSection'
+import BACKEND_BASE_URL from '../../api/api'
 
 const initialDraft = {
   name: '',
@@ -203,7 +204,7 @@ const ProductDisplay = () => {
         formData.append('images', file)
       })
 
-      const response = await axios.post('http://localhost:5000/api/products', formData, {
+      const response = await axios.post(`${BACKEND_BASE_URL}/api/products`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

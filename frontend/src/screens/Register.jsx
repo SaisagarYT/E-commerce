@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import city from '../assets/pexels-misael-garcia-832776-1707820.jpg';
+import BACKEND_BASE_URL from '../../api/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/users/register', {
+      const res = await axios.post(`${BACKEND_BASE_URL}/api/users/register`, {
         name,
         email,
         password,

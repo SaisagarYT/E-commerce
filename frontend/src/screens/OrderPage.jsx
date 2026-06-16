@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
+import BACKEND_BASE_URL from '../../api/api'
 
 const OrderPage = () => {
 const { id } = useParams()
@@ -16,7 +17,7 @@ const [selectedImage, setSelectedImage] = useState('');
 useEffect(() => {
   const finalData = async () => {
   const response = await Axios.get(
-  `http://localhost:5000/api/products/${id}`
+  `${BACKEND_BASE_URL}/api/products/${id}`
   );
 
   setData(response.data);
@@ -38,7 +39,7 @@ const insertIntoCart = async () => {
   }
 
   const response = await Axios.post(
-      'http://localhost:5000/api/cart/add',
+      `${BACKEND_BASE_URL}/api/cart/add`,
       productData,
       {
         headers: {

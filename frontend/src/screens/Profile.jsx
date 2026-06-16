@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import BACKEND_BASE_URL from '../../api/api';
 
 const Profile = () => {
   const [data, setData] = useState(null);
@@ -16,7 +17,7 @@ const Profile = () => {
     }
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/users/profile`, {
+        const res = await axios.get(`${BACKEND_BASE_URL}/api/users/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

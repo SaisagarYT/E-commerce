@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
+import BACKEND_BASE_URL from '../../api/api';
 
 const Buypage = () => {
     const {id} = useParams();
@@ -10,7 +11,7 @@ const Buypage = () => {
     const [remove,setRemove] = useState(false);
     const token = localStorage.getItem('token');
     const handleData = async() =>{
-        const response = await Axios.get(`http://localhost:5000/api/cart/get`,{
+        const response = await Axios.get(`${BACKEND_BASE_URL}/api/cart/get`,{
             headers:{
                 Authorization:`Bearer ${token}`
             }
@@ -30,7 +31,7 @@ const Buypage = () => {
     const removeProduct = async(product_id) =>{
         try{
 
-            const response = await Axios.delete(`http://localhost:5000/api/cart/delete/${product_id}`,{
+            const response = await Axios.delete(`${BACKEND_BASE_URL}/api/cart/delete/${product_id}`,{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }
@@ -49,7 +50,7 @@ const Buypage = () => {
 
     const removeAllProduct = async(e) =>{
         e.preventDefault();
-        const response = await Axios.delete(`http://localhost:5000/api/cart/remove/all`,{
+        const response = await Axios.delete(`${BACKEND_BASE_URL}/api/cart/remove/all`,{
             headers:{
                 Authorization:`Bearer ${token}`
             }
@@ -59,7 +60,7 @@ const Buypage = () => {
     } 
 
     const addProduct = async(item) =>{
-        const response = await Axios.post("http://localhost:5000/api/cart/add",{
+        const response = await Axios.post(`${BACKEND_BASE_URL}/api/cart/add`,{
             product:item._id,
             image:item.image,
             name:item.name,
@@ -75,7 +76,7 @@ const Buypage = () => {
     }
 
     const deleteComplete = async(id) =>{
-        const response = await Axios.delete(`http://localhost:5000/api/cart/complete/${id}`,{
+        const response = await Axios.delete(`${BACKEND_BASE_URL}/api/cart/complete/${id}`,{
             headers:{
                 Authorization:`Bearer ${token}`
             }

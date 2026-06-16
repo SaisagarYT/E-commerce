@@ -1,13 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import BACKEND_BASE_URL from "../../api/api";
 
 const NewArrivels = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     try {
       const fetchProducts = async () => {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${BACKEND_BASE_URL}/api/products`);
         setData(res.data);
       };
       fetchProducts();

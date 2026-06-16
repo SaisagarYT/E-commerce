@@ -9,7 +9,9 @@ const orderRoute = require('./routes/orderRoutes');
 dotevn.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:["http://localhost:5173","https://ecommerce.sagarsailada.site/"]
+}));
 connectDB();
 
 app.use('/api/users',userRoute);

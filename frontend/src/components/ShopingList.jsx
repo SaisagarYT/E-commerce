@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import BACKEND_BASE_URL from '../../api/api';
 
 const ShopingList = (props) => {
   const [data,setData] = useState([])
   useEffect(() =>{
-    Axios.get('http://localhost:5000/api/products')
+    Axios.get(`${BACKEND_BASE_URL}/api/products`)
     .then((res) => setData(res.data));
   },[]);
 

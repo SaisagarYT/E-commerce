@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Axios from 'axios'
 import GenericTable from '../reusableComponents/GenericTable'
+import BACKEND_BASE_URL from '../../api/api'
 
 const tabs = [
   { label: 'All order', suffix: '240' },
@@ -24,7 +25,7 @@ const OrderDisplay = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await Axios.get('http://localhost:5000/api/orders/myorders', {
+        const response = await Axios.get(`${BACKEND_BASE_URL}/api/orders/myorders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

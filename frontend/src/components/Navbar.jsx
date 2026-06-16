@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import BACKEND_BASE_URL from '../../api/api';
 
 const Navbar = () => {
 const bannerHandler = () =>{
@@ -16,7 +17,7 @@ try {
 const token = localStorage.getItem('token');
 
     const response = await axios.get(
-      'http://localhost:5000/api/cart/get',
+      `${BACKEND_BASE_URL}/api/cart/get`,
       {
         headers:{
           Authorization:`Bearer ${token}`

@@ -7,6 +7,7 @@ import ProductDisplay from '../components/ProductDisplay';
 import SettingsDisplay from '../components/SettingsDisplay';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import BACKEND_BASE_URL from '../../api/api';
 
 
 const AdminDsiplay = () => {
@@ -16,7 +17,7 @@ const AdminDsiplay = () => {
   console.log(token)
   useEffect(() =>{
     const userFetch = async() => {
-      const response = await axios.get("http://localhost:5000/api/users/profile",{
+      const response = await axios.get(`${BACKEND_BASE_URL}/api/users/profile`,{
         headers:{
           Authorization:`Bearer ${token}`
         }
