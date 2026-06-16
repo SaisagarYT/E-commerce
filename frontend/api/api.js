@@ -1,4 +1,4 @@
-const BACKEND_BASE_URL="https://chop-co.netlify.app";
+const BACKEND_BASE_URL="";
 
 export default BACKEND_BASE_URL;
 
